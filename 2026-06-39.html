@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-39","y":2026,"m":6,"q":39,"type":"문장삽입","instr":"글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.","given":"It was also within the range of reds that they learned early on to diversify the palette and to produce varied tones and shades, as the oldest known color terms demonstrate.","psg":"For thousands of years in the West, red was the only color worthy of that name, the only true color. As much on the historical as hierarchical level, it exceeded all others. ( ①) Not that they did not exist, but they had to wait a long time before they were considered colors and then played a comparable role in material culture, social codes, and systems of thought. ( ②) It was with red that humans did their first color experiments, achieved their first successes, and then constructed a chromatic universe. ( ③) Here the lexicon seems in keeping with pictorial practices and coloring techniques. ( ④) In certain languages, the same word can mean \"red\" or simply \"colored,\" depending on the context, such as coloratus in classical Latin or colorado in modern Castilian. ( ⑤) In other languages, the words meaning \"red\" and \"beautiful\" share a common root; for example, that is the case in Russian, in which the terms krasnyy (red) and krasivy (beautiful) belong to the same lexical family.","ch":[],"ans":3,"pts":3,"foot":[{"word":"hierarchical","gloss":"위계의"},{"word":"chromatic","gloss":"색채의"},{"word":"lexicon","gloss":"어휘 목록"}],"needImg":false,"sents":[{"ck":[["It was also within the range of reds","또한 빨강 계열 안에서였다"],["that they learned early on","그들이 일찍부터 배웠던 것은"],["to diversify the palette","색채의 범위를 다양화하는 법을"],["and to produce varied tones and shades,","그리고 다양한 색조와 명암을 만들어 내는 법을"],["as the oldest known color terms demonstrate.","가장 오래된 색채 용어가 보여 주듯이"]],"g":"<b>[주어진 문장]</b> 색의 폭을 넓히고 다양한 색조·명암을 만드는 법을 일찍 익힌 것도 <b>빨강 계열 안에서</b>였다 — 가장 오래된 색 이름들이 그 증거다."},{"ck":[["For thousands of years in the West,","서양에서 수천 년 동안"],["red was the only color worthy of that name,","빨강은 그 이름에 값하는 유일한 색이었다"],["the only true color.","유일한 진짜 색"]],"g":"서양에서 수천 년간 빨강은 '색'이라 부를 값이 있는 유일한 색이었다."},{"ck":[["As much on the historical as hierarchical level,","역사적 차원에서나 위계적 차원에서나"],["it exceeded all others.","그것은 다른 모든 것을 뛰어넘었다"]],"g":"역사로 보나 서열로 보나 빨강은 다른 모든 색을 앞질렀다."},{"ck":[["( ①) Not that they did not exist,","( ①) 그것들이 존재하지 않았다는 것이 아니라"],["but they had to wait a long time","다만 오랜 시간을 기다려야 했다"],["before they were considered colors","그것들이 색으로 여겨지고"],["and then played a comparable role","그러고 나서 비슷한 역할을 하기까지"],["in material culture, social codes, and systems of thought.","물질문화, 사회 규범, 사상 체계에서"]],"g":"다른 색이 없었던 건 아니고, 색으로 인정받아 문화·규범·사상에서 비슷한 몫을 하기까지 오래 걸렸을 뿐이다."},{"ck":[["( ②) It was with red","( ②) 바로 빨강으로였다"],["that humans did their first color experiments,","인간이 최초의 색채 실험을 하고"],["achieved their first successes,","최초의 성공을 거두고"],["and then constructed a chromatic universe.","그리고 색채의 세계를 구축한 것은"]],"g":"인간이 첫 색채 실험을 하고 첫 성공을 거둬 색의 세계를 세운 것은 바로 빨강으로였다."},{"ck":[["( ③) Here the lexicon seems in keeping","( ③) 여기서 어휘 목록은 부합하는 것 같다"],["with pictorial practices and coloring techniques.","회화 관행 및 채색 기법과"]],"g":"여기서 <b>어휘</b>는 그림 그리는 관행이나 채색 기법과 맞아떨어지는 듯하다."},{"ck":[["( ④) In certain languages,","( ④) 어떤 언어에서는"],["the same word can mean \"red\" or simply \"colored,\"","같은 단어가 '빨강' 또는 그냥 '색이 있는'을 뜻할 수 있다"],["depending on the context,","문맥에 따라"],["such as coloratus in classical Latin","고전 라틴어의 coloratus나"],["or colorado in modern Castilian.","현대 카스티야어의 colorado처럼"]],"g":"어떤 언어에서는 한 단어가 문맥에 따라 '빨강'도 되고 '유색'도 된다 — 라틴어 coloratus, 카스티야어 colorado처럼."},{"ck":[["( ⑤) In other languages,","( ⑤) 다른 언어들에서는"],["the words meaning \"red\" and \"beautiful\"","'빨간'과 '아름다운'을 뜻하는 단어가"],["share a common root;","같은 어원을 공유한다"],["for example, that is the case in Russian,","예를 들어 러시아어가 그런 경우인데"],["in which the terms krasnyy (red) and krasivy (beautiful)","거기서 krasnyy(빨강)와 krasivy(아름다운)라는 말은"],["belong to the same lexical family.","같은 어족에 속한다"]],"g":"다른 언어에선 '빨강'과 '아름다움'이 같은 뿌리다 — 러시아어 krasnyy와 krasivy가 그렇다."}],"theme":"서양에서 <b>빨강만이 진짜 색</b>이었던 역사다. 수천 년 동안 빨강은 그 이름값을 하는 유일한 색이었고, 역사적으로나 위계상으로나 다른 모든 색을 앞질렀다. 다른 색이 없었던 게 아니라, 색으로 인정받고 문화·규범·사상에서 비슷한 역할을 하기까지 <b>오래 기다려야</b> 했을 뿐이다. 인간의 첫 색채 실험과 첫 성공은 빨강으로 이루어졌고, 색조와 명암을 다양화하는 법도 <b>빨강 계열 안에서</b> 먼저 익혔다. 그 흔적이 어휘에 남아 있다 — 라틴어 <i>coloratus</i>, 카스티야어 <i>colorado</i>는 '빨강'과 '유색'을 함께 뜻하고, 러시아어 <i>krasnyy</i>(빨강)와 <i>krasivy</i>(아름다운)는 어원이 같다.","why":"주어진 문장의 끝 <i>as the oldest known color terms demonstrate</i>(가장 오래된 <b>색채 용어</b>가 보여 주듯)가 열쇠입니다. 바로 뒤 ③의 <i>Here the lexicon...</i>(여기서 그 <b>어휘 목록</b>은)이 그 '용어'를 받아야 말이 이어집니다. 그래서 답은 <b>③</b>.","rub":[["① 빨강이 유일한 색","빨강 · 빨간 · red · 유일 · 진짜 · 최초 · 첫"],["② 다른 색은 늦게 인정","다른 색 · 나중 · 늦 · 오래 · 기다 · 인정"],["③ 어휘에 흔적이 남음","어휘 · 단어 · 말 · 언어 · 라틴 · 러시아 · 어원 · 뿌리 · 색조 · 명암"]],"dic":{"within the range of":{"p":"뤠인지","k":"~의 범위 안에서"},"diversify":{"p":"다이벌씨파이","k":"다양화하다"},"palette":{"p":"팰럿","k":"색채의 범위, 팔레트"},"varied":{"p":"베뤼드","k":"다양한"},"tone":{"p":"토운","k":"색조"},"shade":{"p":"셰이드","k":"명암, 색의 농담"},"demonstrate":{"p":"데먼스트뤠잇","k":"보여 주다, 입증하다"},"worthy of":{"p":"월디 오브","k":"~에 값하는, ~할 만한"},"hierarchical":{"p":"하이어롸키컬","k":"위계의 (각주)"},"exceed":{"p":"익씨드","k":"뛰어넘다, 능가하다"},"comparable":{"p":"캄퍼뤄블","k":"비슷한, 견줄 만한"},"material culture":{"p":"머티뤼얼 컬철","k":"물질문화"},"social code":{"p":"쏘우셜 코우드","k":"사회 규범"},"system of thought":{"p":"씨스텀 오브 쏘옷","k":"사상 체계"},"experiment":{"p":"익스페뤼먼트","k":"실험"},"construct":{"p":"컨스트뤅트","k":"구축하다"},"chromatic":{"p":"크로우매릭","k":"색채의 (각주)"},"lexicon":{"p":"렉씨칸","k":"어휘 목록 (각주)"},"in keeping with":{"p":"인 키핑 위드","k":"~과 부합하는"},"pictorial":{"p":"픽토뤼얼","k":"회화의, 그림의"},"depending on":{"p":"디펜딩 온","k":"~에 따라"},"context":{"p":"칸텍스트","k":"문맥, 맥락"},"classical latin":{"p":"클래씨컬 래튼","k":"고전 라틴어"},"share a root":{"p":"셰얼 어 룻","k":"어원을 공유하다"},"lexical family":{"p":"렉씨컬 패멀리","k":"어족, 같은 말뿌리 무리"},"such":{"p":"써치","k":"그러한, ~와 같은,매우 ~한"},"learned":{"p":"런","k":"배우다"},"achieved":{"p":"어취브","k":"달성하다"},"before":{"p":"비펄","k":"~ 전에"},"same":{"p":"쎄임","k":"같은, 동일한"},"constructed":{"p":"컨스트뤅트","k":"구축하다"},"tones":{"p":"토운","k":"색조"},"techniques":{"p":"테크닉","k":"기법"},"culture":{"p":"컬춸","k":"문화, 교양"},"root":{"p":"뤁","k":"뿌리박다"},"range":{"p":"뤠인지","k":"범위, 폭; 이르다"},"thought":{"p":"띵크","k":"생각하다"},"share":{"p":"쉐얼","k":"점유율"},"west":{"p":"웨스트","k":"서쪽; 서쪽의; 서쪽으로"},"all":{"p":"얼","k":"모든"},"known":{"p":"노우","k":"알다, 알고 있다"},"color":{"p":"컬럴","k":"색, 색깔"},"exceeded":{"p":"익씨드","k":"뛰어넘다, 능가하다"},"colors":{"p":"컬럴","k":"색, 색깔"},"languages":{"p":"랭귀쥐","k":"언어"},"mean":{"p":"민","k":"의미하다"},"produce":{"p":"프러듀스","k":"생산하다, 만들어내다"},"certain":{"p":"","k":"확실한"},"humans":{"p":"휴먼","k":"인간의"},"classical":{"p":"클래씨클","k":"고전적인"},"years":{"p":"이얼","k":"한 해, 1년"},"successes":{"p":"썩쎄스","k":"성공"},"codes":{"p":"코우드","k":"부호화하다"},"only":{"p":"온리","k":"유일한; 단지, 오직"},"worthy":{"p":"","k":"~할 가치가 있는"},"terms":{"p":"","k":"임기"},"long":{"p":"롱","k":"긴"},"keeping":{"p":"킵","k":"유지하다, 지키다"},"historical":{"p":"히스또뤼컬","k":"역사의, 역사적인"},"name":{"p":"네임","k":"이름을 붙이다"},"depending":{"p":"디펜드","k":"의존하다"},"experiments":{"p":"익스페뤼먼트","k":"실험"},"common":{"p":"카먼","k":"흔한"},"oldest":{"p":"올드","k":"늙은, 나이 많은; 오래된"},"played":{"p":"플레이","k":"놀다"},"seems":{"p":"씸","k":"~처럼 보이다"},"universe":{"p":"유니벌스","k":"우주"},"shades":{"p":"셰이드","k":"명암, 색의 농담"},"role":{"p":"롤","k":"배역"},"time":{"p":"타임","k":"시대, 횟수"},"modern":{"p":"마던","k":"현대의, 근대의"},"colored":{"p":"컬럴","k":"색, 색깔"},"considered":{"p":"컨씨덜","k":"고려하다, 여기다"},"beautiful":{"p":"뷰티풀","k":"아름다운"},"lexical":{"p":"","k":"어휘의"},"material":{"p":"머티뤼얼","k":"제재"},"family":{"p":"페밀리","k":"가족"},"had":{"p":"해브","k":"먹다"},"meaning":{"p":"미닝","k":"의미, 뜻"},"early":{"p":"얼리","k":"일찍; 이른"},"case":{"p":"케이스","k":"경우, 사건"},"coloring":{"p":"컬럴","k":"색, 색깔"},"first":{"p":"펄스트","k":"첫 번째의"},"much":{"p":"머취","k":"(양이) 많은"},"social":{"p":"쏘우셜","k":"사회적인, 사교적인"},"practices":{"p":"프랙티쓰","k":"관습"},"systems":{"p":"씨스텀","k":"체계, 시스템"},"belong":{"p":"빌롱","k":"속하다, 소속되다"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

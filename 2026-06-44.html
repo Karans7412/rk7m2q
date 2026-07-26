@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-44","y":2026,"m":6,"q":44,"type":"장문-지칭","instr":"다음 글을 읽고, 물음에 답하시오. 밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 다른 것은?","given":"","psg":"(A) Every day after school, Sally walked home through the park. She liked listening to music in her headphones and looking at the trees on her way home. One day, while she was changing songs, she heard strange, unpolished music. She took off her headphones and followed the music through the park. She saw a kind-looking old woman sitting on a small bench and playing the violin. While (a) her music wasn't perfect, there was something warm and welcoming about it. So, Sally walked closer. (B) The following day, they met at the same bench. Sally was happy to hear the old woman's music again, but when she sat, the woman stopped playing. \"Today is your first full lesson,\" she said as she handed the violin to Sally. (b) She showed the young woman how to place her fingers on the strings. After an hour, she had learned some basics. Then, the old woman played the same music from the day before. Sally promised to meet her every day and started walking home. As she walked, simple, unpolished music was playing in her mind. (C) The old woman asked Sally if she played any instruments. Suddenly, Sally remembered learning the recorder from her older sister Beatrice when she was a girl. Beatrice had said, \"You just have no musical talent.\" Sally looked back to the old woman sadly and told (c) her the story. The old woman winked, handed the violin to Sally, and said, \"You don't need talent to enjoy playing.\" Feeling brave, Sally accepted the instrument and tried playing. The sound was rough, and she felt embarrassed. But the old woman just smiled and said, \"That's how it begins. (d) I hope to see you again tomorrow.\" (D) \"Hello! Are you going to listen to my performance?\" the old woman looked up and asked. Sally laughed and replied, \"Oh sorry, I was just passing by.\" (e) She turned to continue walking home, but decided to stop for a bit and listen. After the woman's music finished, Sally asked her when she had started playing the violin. \"I just started last year, but I always wanted to learn,\" the woman answered. Sally was impressed by her response. Even though she loved listening to music, she could not play any instruments well.","ch":["(a)","(b)","(c)","(d)","(e)"],"ans":5,"pts":2,"foot":[],"needImg":false,"sents":[{"ck":[["(A) Every day after school,","(A) 방과 후 매일"],["Sally walked home through the park.","Sally는 공원을 가로질러 집으로 걸어갔다"]],"g":"(A) 방과 후면 Sally는 늘 공원을 가로질러 집으로 걸어갔다."},{"ck":[["She liked listening to music in her headphones","그녀는 헤드폰으로 음악 듣는 것을 좋아했다"],["and looking at the trees on her way home.","그리고 집에 가는 길에 나무를 보는 것을"]],"g":"헤드폰으로 음악을 듣고 길가의 나무를 바라보는 걸 좋아했다."},{"ck":[["One day, while she was changing songs,","어느 날 그녀가 노래를 바꾸고 있을 때"],["she heard strange, unpolished music.","그녀는 이상하고 다듬어지지 않은 음악을 들었다"]],"g":"어느 날 곡을 바꾸다가, 이상하고 <b>서툰</b> 음악 소리를 들었다."},{"ck":[["She took off her headphones","그녀는 헤드폰을 벗었다"],["and followed the music through the park.","그리고 공원을 가로질러 그 음악을 따라갔다"]],"g":"헤드폰을 벗고 소리를 따라 공원을 가로질러 갔다."},{"ck":[["She saw a kind-looking old woman","그녀는 친절해 보이는 노부인을 보았다"],["sitting on a small bench","작은 벤치에 앉아"],["and playing the violin.","바이올린을 연주하고 있는"]],"g":"작은 벤치에 앉아 바이올린을 켜는 인상 좋은 노부인이 있었다."},{"ck":[["While (a) her music wasn't perfect,","(a) 그녀의 음악은 완벽하지 않았지만"],["there was something warm and welcoming about it.","거기에는 따뜻하고 마음을 끄는 무언가가 있었다"]],"g":"연주는 완벽하지 않았지만 어딘가 따뜻하고 사람을 끄는 데가 있었다."},{"ck":[["So, Sally walked closer.","그래서 Sally는 더 가까이 걸어갔다"]],"g":"그래서 Sally는 더 가까이 다가갔다."},{"ck":[["(B) The following day,","(B) 그 다음 날"],["they met at the same bench.","그들은 같은 벤치에서 만났다"]],"g":"(B) 다음 날 두 사람은 같은 벤치에서 만났다."},{"ck":[["Sally was happy to hear the old woman's music again,","Sally는 노부인의 음악을 다시 듣게 되어 기뻤다"],["but when she sat, the woman stopped playing.","하지만 그녀가 앉자 노부인은 연주를 멈췄다"]],"g":"다시 그 연주를 듣게 되어 기뻤는데, Sally가 앉자 노부인은 연주를 멈췄다."},{"ck":[["\"Today is your first full lesson,\" she said","'오늘이 네 첫 정식 수업이란다'라고 그녀는 말했다"],["as she handed the violin to Sally.","바이올린을 Sally에게 건네면서"]],"g":"'오늘이 네 첫 정식 수업이야.' 노부인은 바이올린을 건네며 말했다."},{"ck":[["(b) She showed the young woman","(b) 그녀는 그 젊은 여성에게 보여 주었다"],["how to place her fingers on the strings.","줄 위에 손가락을 놓는 법을"]],"g":"노부인은 줄 위에 손가락을 얹는 법을 알려 주었다."},{"ck":[["After an hour, she had learned some basics.","한 시간 뒤 그녀는 기본을 좀 배웠다"]],"g":"한 시간이 지나자 Sally는 기본을 조금 익혔다."},{"ck":[["Then, the old woman played the same music","그러고 나서 노부인은 같은 음악을 연주했다"],["from the day before.","전날의"]],"g":"그다음 노부인은 전날과 같은 곡을 연주했다."},{"ck":[["Sally promised to meet her every day","Sally는 그녀를 매일 만나기로 약속했다"],["and started walking home.","그리고 집으로 걷기 시작했다"]],"g":"Sally는 매일 만나기로 약속하고 집으로 향했다."},{"ck":[["As she walked,","걸어가는 동안"],["simple, unpolished music was playing in her mind.","단순하고 다듬어지지 않은 음악이 그녀의 마음속에서 흐르고 있었다"]],"g":"걷는 내내 그 단순하고 서툰 음악이 마음속에서 울리고 있었다."},{"ck":[["(C) The old woman asked Sally","(C) 노부인은 Sally에게 물었다"],["if she played any instruments.","악기를 연주할 줄 아느냐고"]],"g":"(C) 노부인이 다룰 줄 아는 악기가 있느냐고 물었다."},{"ck":[["Suddenly, Sally remembered learning the recorder","갑자기 Sally는 리코더를 배웠던 것을 떠올렸다"],["from her older sister Beatrice","언니 Beatrice에게서"],["when she was a girl.","어린 소녀였을 때"]],"g":"문득 어릴 적 언니 Beatrice에게 리코더를 배우던 기억이 떠올랐다."},{"ck":[["Beatrice had said,","Beatrice는 말했었다"],["\"You just have no musical talent.\"","'너는 그냥 음악적 재능이 없어'"]],"g":"그때 Beatrice는 '<b>넌 음악적 재능이 전혀 없어</b>'라고 했었다."},{"ck":[["Sally looked back to the old woman sadly","Sally는 슬픈 얼굴로 노부인을 돌아보았다"],["and told (c) her the story.","그리고 (c) 그녀에게 그 이야기를 했다"]],"g":"Sally는 슬픈 얼굴로 노부인을 돌아보며 그 이야기를 들려주었다."},{"ck":[["The old woman winked,","노부인은 윙크했다"],["handed the violin to Sally, and said,","바이올린을 Sally에게 건네며 말했다"],["\"You don't need talent to enjoy playing.\"","'연주를 즐기는 데 재능은 필요 없단다'"]],"g":"노부인은 윙크하며 바이올린을 건넸다. '<b>즐기는 데 재능은 필요 없어.</b>'"},{"ck":[["Feeling brave,","용기가 나서"],["Sally accepted the instrument and tried playing.","Sally는 악기를 받아 들고 연주해 보았다"]],"g":"용기가 난 Sally는 악기를 받아 켜 보았다."},{"ck":[["The sound was rough, and she felt embarrassed.","소리는 거칠었고 그녀는 창피했다"]],"g":"소리는 거칠었고, Sally는 부끄러웠다."},{"ck":[["But the old woman just smiled and said,","하지만 노부인은 그저 미소 지으며 말했다"],["\"That's how it begins.","'다들 그렇게 시작하는 거란다"],["(d) I hope to see you again tomorrow.\"","(d) 나는 내일 너를 다시 보고 싶구나'"]],"g":"노부인은 미소만 지었다. '<b>다 그렇게 시작하는 거야. 내일 또 보자.</b>'"},{"ck":[["(D) \"Hello! Are you going to listen to my performance?\"","(D) '안녕! 내 연주를 들어 볼 거니?'"],["the old woman looked up and asked.","노부인이 올려다보며 물었다"]],"g":"(D) '안녕! 내 연주 들어 볼래?' 노부인이 고개를 들며 물었다."},{"ck":[["Sally laughed and replied,","Sally는 웃으며 대답했다"],["\"Oh sorry, I was just passing by.\"","'아, 죄송해요, 그냥 지나가던 길이었어요'"]],"g":"Sally는 웃으며 '아, 죄송해요. 그냥 지나가던 길이라서요'라고 답했다."},{"ck":[["(e) She turned to continue walking home,","(e) 그녀는 집으로 계속 가려고 몸을 돌렸다"],["but decided to stop for a bit and listen.","하지만 잠깐 멈춰 듣기로 했다"]],"g":"Sally는 가던 길을 계속 가려다, 잠깐 멈춰 듣기로 했다."},{"ck":[["After the woman's music finished,","노부인의 음악이 끝난 뒤"],["Sally asked her","Sally는 그녀에게 물었다"],["when she had started playing the violin.","언제 바이올린을 시작했는지"]],"g":"연주가 끝나자 Sally는 언제부터 바이올린을 켰는지 물었다."},{"ck":[["\"I just started last year,","'나는 작년에 막 시작했단다"],["but I always wanted to learn,\"","하지만 늘 배우고 싶었지'"],["the woman answered.","라고 노부인이 대답했다"]],"g":"'작년에야 시작했어. 하지만 <b>늘 배우고 싶었지.</b>'"},{"ck":[["Sally was impressed by her response.","Sally는 그 대답에 깊은 인상을 받았다"]],"g":"그 대답에 Sally는 깊은 인상을 받았다."},{"ck":[["Even though she loved listening to music,","그녀는 음악 듣기를 아주 좋아했지만"],["she could not play any instruments well.","어떤 악기도 잘 연주하지 못했다"]],"g":"Sally는 음악 듣는 건 좋아했어도, 다룰 줄 아는 악기는 없었다."}],"theme":"43번과 <b>같은 지문</b>이다. 이 문항은 (a)~(e)가 각각 누구를 가리키는지 따진다. 등장인물은 <b>Sally</b>(학생)와 <b>노부인</b>(바이올린을 켜는 사람) 둘뿐이므로, 각 대명사 앞뒤에서 '누가 그 행동을 하고 있는지'만 붙잡으면 된다.","why":"(a) her music = <b>노부인</b>의 음악, (b) She showed = 손가락 놓는 법을 <b>가르치는</b> 노부인, (c) told her the story = Sally가 이야기를 들려준 상대인 <b>노부인</b>, (d) I hope to see you = 노부인의 <b>말</b> 속 '나'. 그런데 (e) She turned to continue walking home은 <b>집으로 가려던 Sally</b>입니다. 따라서 나머지 넷과 다른 것은 ⑤.","rub":[["① 두 인물뿐","Sally · 노부인 · 할머니 · 두 사람 · 학생"],["② 노부인이 하는 행동","연주 · 가르치 · 건네 · 보여 주 · 말하 · 윙크"],["③ Sally가 하는 행동","지나가 · 돌아서 · 집으로 · 듣 · 물어보 · 받아 들"]],"dic":{"on one's way home":{"p":"온 원즈 웨이 호움","k":"집에 가는 길에"},"unpolished":{"p":"언팔리쉬트","k":"다듬어지지 않은, 서툰"},"take off":{"p":"테익 오프","k":"벗다"},"follow":{"p":"팔로우","k":"따라가다"},"kind-looking":{"p":"카인드 루킹","k":"친절해 보이는"},"bench":{"p":"벤치","k":"벤치"},"welcoming":{"p":"웰커밍","k":"마음을 끄는, 반겨 주는"},"walk closer":{"p":"워크 클로우썰","k":"더 가까이 다가가다"},"the following day":{"p":"더 팔로우잉 데이","k":"그 다음 날"},"hand a to b":{"p":"핸드","k":"A를 B에게 건네다"},"string":{"p":"스트륑","k":"(악기의) 줄"},"basics":{"p":"베이씩스","k":"기본"},"the day before":{"p":"더 데이 비폴","k":"전날"},"promise to":{"p":"프뤄미스 투","k":"~하기로 약속하다"},"instrument":{"p":"인스트뤄먼트","k":"악기"},"recorder":{"p":"뤼콜덜","k":"리코더"},"talent":{"p":"탤런트","k":"재능"},"look back to":{"p":"룩 백 투","k":"~을 돌아보다"},"wink":{"p":"윙크","k":"윙크하다"},"feel brave":{"p":"필 브뤠이브","k":"용기가 나다"},"accept":{"p":"억쎕트","k":"받아들이다"},"rough":{"p":"뤄프","k":"거친"},"embarrassed":{"p":"임배뤄스트","k":"창피한, 부끄러운"},"performance":{"p":"펄포먼스","k":"연주, 공연"},"pass by":{"p":"패스 바이","k":"지나가다"},"for a bit":{"p":"폴 어 빗","k":"잠깐"},"be impressed by":{"p":"임프뤠스트","k":"~에 깊은 인상을 받다"},"response":{"p":"뤼스판스","k":"대답, 반응"},"even though":{"p":"이븐 도우","k":"비록 ~이지만"},"listen":{"p":"리슨","k":"듣다, 귀 기울이다"},"handed":{"p":"핸드","k":"손"},"showed":{"p":"쑈우","k":"보여 주다, 드러내다; 쇼, 공연"},"accepted":{"p":"억쎕트","k":"받아들이다"},"learned":{"p":"런","k":"배우다"},"before":{"p":"비펄","k":"~ 전에"},"looked":{"p":"룩라익","k":"~해 보이다, 보다"},"sadly":{"p":"쎄드","k":"슬픈"},"strange":{"p":"스트뢰인지","k":"이상한; 낯선"},"same":{"p":"쎄임","k":"같은, 동일한"},"strings":{"p":"스트륑","k":"(악기의) 줄"},"musical":{"p":"뮤지컬","k":"음악의, 뮤지컬"},"mind":{"p":"마인드","k":"신경을 쓰다, 꺼리다"},"music":{"p":"뮤직","k":"음악"},"after":{"p":"에프털","k":"~ 후에[뒤에]"},"last":{"p":"라스트","k":"지속되다"},"day":{"p":"데이","k":"낮, 하루, 날"},"trees":{"p":"트뤼","k":"나무"},"learning":{"p":"런","k":"배우다"},"off":{"p":"오프","k":"떨어져,(무엇이) 제거되어"},"every":{"p":"에브뤼","k":"모든"},"from":{"p":"프럼","k":"~에서, ~부터"},"have":{"p":"해브","k":"먹다"},"back":{"p":"백","k":"뒤,등, 다시 돌아서"},"always":{"p":"얼웨이즈","k":"항상, 언제나"},"play":{"p":"플레이","k":"놀다"},"walked":{"p":"웍","k":"걷다; 산책시키다; 걷기"},"replied":{"p":"뤼플라이","k":"대답"},"old":{"p":"올드","k":"늙은, 나이 많은; 오래된"},"met":{"p":"","k":"충족시키다"},"while":{"p":"와일","k":"~하는 동안에"},"listening":{"p":"리슨","k":"듣다, 귀 기울이다"},"woman":{"p":"워먼","k":"(성인) 여자, 여성"},"fingers":{"p":"핑걸","k":"손가락"},"sister":{"p":"씨스털","k":"언니, 누나, 여동생"},"following":{"p":"팔로윙","k":"그 다음의"},"perfect":{"p":"펄펙트","k":"완벽한"},"remembered":{"p":"뤼멤벌","k":"기억하다"},"begins":{"p":"비긴","k":"시작하다"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"looking":{"p":"룩라익","k":"~해 보이다, 보다"},"again":{"p":"어게인","k":"한 번 더, 다시"},"suddenly":{"p":"써든리","k":"갑자기"},"sound":{"p":"싸운드","k":"타당한"},"heard":{"p":"히얼","k":"듣다, 들리다"},"answered":{"p":"앤설","k":"답하다, 답, 대답"},"finished":{"p":"피니쉬","k":"끝내다, 끝나다"},"laughed":{"p":"래프","k":"(소리 내어) 웃다"},"bit":{"p":"빗","k":"조금,작은양"},"through":{"p":"뜨루","k":"~을 통해 (관통하여),~사이로"},"said":{"p":"쎄이","k":"말하다"},"tomorrow":{"p":"투머뤄","k":"내일"},"learn":{"p":"런","k":"배우다"},"feeling":{"p":"필링","k":"감정, 느낌"},"started":{"p":"스딸트","k":"시작하다; 시작"},"saw":{"p":"","k":"톱질하다, 톱으로 자르다"},"playing":{"p":"플레이","k":"놀다"},"lesson":{"p":"레쓴","k":"수업, 교훈"},"followed":{"p":"팔로우","k":"따라가다"},"continue":{"p":"","k":"계속되다"},"need":{"p":"니드","k":"(보통 복수로) 필요한 것"},"played":{"p":"플레이","k":"놀다"},"decided":{"p":"디싸이드","k":"결정하다"},"promised":{"p":"프라미스","k":"약속, 약속하다"},"wanted":{"p":"원트","k":"원하다, ~하고 싶다"},"older":{"p":"올드","k":"늙은, 나이 많은; 오래된"},"enjoy":{"p":"인조이","k":"즐기다"},"some":{"p":"썸","k":"몇몇의, 약간의"},"told":{"p":"텔","k":"알리다, 말하다"},"place":{"p":"플레이쓰","k":"두다, 놓다"},"girl":{"p":"걸","k":"소녀, 여자아이"},"story":{"p":"스떠뤼","k":"이야기"},"felt":{"p":"필","k":"느끼다, ~한 기분이 들다"},"small":{"p":"스멀","k":"작은, 소규모의"},"year":{"p":"이얼","k":"한 해, 1년"},"warm":{"p":"웜","k":"따뜻한"},"happy":{"p":"해삐","k":"행복한"},"took":{"p":"테익","k":"가져오다, 데려오다"},"park":{"p":"팔크","k":"공원"},"had":{"p":"해브","k":"먹다"},"winked":{"p":"윙크","k":"윙크하다"},"stop":{"p":"스땁","k":"멈추다; 정류장"},"see":{"p":"씨","k":"보다"},"hear":{"p":"히얼","k":"듣다, 들리다"},"hour":{"p":"아월","k":"시간, 시각"},"meet":{"p":"","k":"충족시키다"},"impressed":{"p":"","k":"깊은 인상을 주다"},"walking":{"p":"웍","k":"걷다; 산책시키다; 걷기"},"today":{"p":"투데이","k":"오늘"},"first":{"p":"펄스트","k":"첫 번째의"},"brave":{"p":"브레이브","k":"용감한"},"young":{"p":"영","k":"어린, 젊은"},"instruments":{"p":"인스트뤄먼트","k":"악기"},"hope":{"p":"홉","k":"희망; 바라다"},"asked":{"p":"애슥크","k":"묻다, 부탁하다"},"changing":{"p":"최인지","k":"바꾸다; 변하다"},"full":{"p":"풀","k":"배부른"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

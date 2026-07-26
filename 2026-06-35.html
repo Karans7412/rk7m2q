@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-35","y":2026,"m":6,"q":35,"type":"무관한문장","instr":"다음 글에서 전체 흐름과 관계 없는 문장은?","given":"","psg":"The bigger someone is, the more damage they can do to themselves through even a relatively innocuous accident. Despite toddlers falling over and bumping themselves regularly, the injuries they sustain are rarely serious. ①Their relatively thick bones in comparison to their mass mean they rarely build up enough energy, even at top speed, to do themselves much damage. ②Because of their increased mass (compounded by the fact that they are falling from a greater height and that their reactions may be slower), adults falling over will impact the ground with a much larger force. ③The nonlinear relationship between mass and bone strength means that although their bones are thicker than a toddler's in absolute terms, they may not be relatively thick enough to compensate for the larger impact caused by their increased mass. ④The body mass index (BMI) can serve as a convenient way for non-experts to examine their health conditions in daily lives. ⑤For the same reasons, taller people have been found to suffer more fall-related injuries ― like hip breaks ― than shorter people.","ch":[],"ans":4,"pts":2,"foot":[{"word":"innocuous","gloss":"무해한"},{"word":"toddler","gloss":"아장아장 걷는 아기"}],"needImg":false,"sents":[{"ck":[["The bigger someone is,","누군가의 몸집이 클수록"],["the more damage they can do to themselves","그들은 스스로에게 더 많은 해를 입힐 수 있다"],["through even a relatively innocuous accident.","비교적 무해한 사고를 통해서조차"]],"g":"몸집이 클수록, 별것 아닌 사고로도 스스로에게 더 큰 상해를 입힐 수 있다."},{"ck":[["Despite toddlers falling over and bumping themselves regularly,","아기들이 자주 넘어지고 부딪히는데도"],["the injuries they sustain","그들이 입는 부상은"],["are rarely serious.","심각한 경우가 드물다"]],"g":"아장아장 걷는 아기는 툭하면 넘어지고 부딪히는데도 크게 다치는 일이 드물다."},{"ck":[["①Their relatively thick bones","상대적으로 두꺼운 그들의 뼈는"],["in comparison to their mass","그들의 몸무게에 비해"],["mean they rarely build up enough energy,","그들이 충분한 에너지를 좀처럼 쌓지 못함을 뜻한다"],["even at top speed,","최고 속도에서조차"],["to do themselves much damage.","스스로에게 큰 해를 입힐 만큼"]],"g":"몸무게에 비해 뼈가 두꺼워서, 전속력으로 부딪혀도 자신을 크게 상하게 할 만한 에너지가 좀처럼 모이지 않는다."},{"ck":[["②Because of their increased mass","늘어난 몸무게 때문에"],["(compounded by the fact","(~라는 사실이 겹쳐"],["that they are falling from a greater height","그들이 더 높은 곳에서 떨어지고 있다는"],["and that their reactions may be slower),","그리고 그들의 반응이 더 느릴 수 있다는),"],["adults falling over will impact the ground","넘어지는 어른은 바닥에 충돌하게 된다"],["with a much larger force.","훨씬 더 큰 힘으로"]],"g":"어른은 몸무게가 큰 데다 더 높은 데서 떨어지고 반응도 느려, 바닥에 훨씬 큰 힘으로 부딪힌다."},{"ck":[["③The nonlinear relationship","비선형적인 관계는"],["between mass and bone strength","몸무게와 뼈 강도 사이의"],["means that although their bones are thicker","그들의 뼈가 더 두껍기는 해도"],["than a toddler's in absolute terms,","절대적 수치로는 아기의 것보다"],["they may not be relatively thick enough","상대적으로 충분히 두껍지 않을 수 있음을 뜻한다"],["to compensate for the larger impact","더 큰 충격을 상쇄할 만큼"],["caused by their increased mass.","늘어난 몸무게가 야기한"]],"g":"몸무게와 뼈 강도는 <b>비례하지 않아서</b>, 절대 수치로는 뼈가 더 두꺼워도 커진 충격을 감당할 만큼 상대적으로 두껍지는 않다."},{"ck":[["④The body mass index (BMI)","체질량 지수(BMI)는"],["can serve as a convenient way","편리한 방법으로 쓰일 수 있다"],["for non-experts to examine their health conditions","비전문가가 자신의 건강 상태를 점검하는"],["in daily lives.","일상생활에서"]],"g":"체질량 지수(BMI)는 비전문가가 일상에서 건강 상태를 점검하는 편리한 수단이 될 수 있다. <b>(← 낙상·뼈 이야기와 무관)</b>"},{"ck":[["⑤For the same reasons,","같은 이유로"],["taller people have been found to suffer","키가 더 큰 사람들이 겪는 것으로 밝혀졌다"],["more fall-related injuries","낙상 관련 부상을 더 많이"],["― like hip breaks ―","― 고관절 골절 같은 ―"],["than shorter people.","키가 더 작은 사람들보다"]],"g":"같은 이유로 키 큰 사람이 작은 사람보다 고관절 골절 같은 낙상 부상을 더 많이 겪는 것으로 나타났다."}],"theme":"<b>몸집이 클수록 넘어질 때 더 크게 다친다</b>는 글이다. 아기는 늘 넘어져도 크게 안 다치는데, 몸무게 대비 뼈가 상대적으로 두꺼워 최고 속도로 부딪혀도 위험한 에너지가 쌓이지 않기 때문이다. 반면 어른은 몸무게가 크고 더 높은 데서 떨어지며 반응도 느려 훨씬 큰 힘으로 바닥에 부딪힌다. 게다가 <b>몸무게와 뼈 강도는 비례하지 않아서</b>, 절대 수치로는 뼈가 더 두꺼워도 커진 충격을 상쇄할 만큼 상대적으로 두껍지는 않다. 그래서 키 큰 사람이 고관절 골절 같은 낙상 부상을 더 많이 겪는다.","why":"이 글은 처음부터 끝까지 <b>몸집 → 낙상 충격 → 부상</b> 한 줄기입니다. ④는 <b>BMI로 건강 상태를 점검하는 방법</b> 이야기라, '몸'이라는 단어만 겹칠 뿐 낙상·뼈·충격과 아무 관계가 없습니다. 무관한 문장 문제는 이렇게 <b>같은 소재의 다른 화제</b>가 끼어드는 경우가 많습니다.","rub":[["① 몸집이 클수록","몸집 · 크 · 무게 · 질량 · 키 · 어른 · 아기"],["② 충격이 커짐","충격 · 힘 · 세게 · 부딪 · 낙상 · 넘어"],["③ 뼈가 상쇄 못 함 → 부상","뼈 · 강도 · 두께 · 비례 안 · 상쇄 · 못 · 부상 · 골절 · 다치"]],"dic":{"damage":{"p":"대미지","k":"손상, 해"},"relatively":{"p":"뤨러티블리","k":"비교적, 상대적으로"},"innocuous":{"p":"이나큐어스","k":"무해한 (각주)"},"toddler":{"p":"타들럴","k":"아장아장 걷는 아기 (각주)"},"fall over":{"p":"폴 오우벌","k":"넘어지다"},"bump":{"p":"범프","k":"부딪히다"},"injury":{"p":"인져뤼","k":"부상"},"sustain":{"p":"써스테인","k":"(부상을) 입다"},"rarely":{"p":"뤠얼리","k":"좀처럼 ~않다"},"in comparison to":{"p":"컴패뤼즌","k":"~에 비해"},"mass":{"p":"매스","k":"질량, 몸무게"},"build up":{"p":"빌드 업","k":"축적하다, 쌓다"},"compound":{"p":"캄파운드","k":"가중시키다"},"impact":{"p":"임팩트","k":"충돌하다; 충격"},"force":{"p":"폴스","k":"힘"},"nonlinear":{"p":"난리니얼","k":"비선형의"},"bone strength":{"p":"보운 스트뤵쓰","k":"뼈 강도"},"in absolute terms":{"p":"앱썰룻 텀즈","k":"절대적인 수치로"},"compensate for":{"p":"캄펀쎄잇","k":"~을 상쇄하다"},"body mass index":{"p":"바디 매스 인덱스","k":"체질량 지수(BMI)"},"convenient":{"p":"컨비년트","k":"편리한"},"non-expert":{"p":"난 엑스펄트","k":"비전문가"},"examine":{"p":"익재민","k":"점검하다, 살피다"},"fall-related":{"p":"폴 뤼레이릿","k":"낙상 관련의"},"hip break":{"p":"힙 브뤠익","k":"고관절 골절"},"compounded":{"p":"캄파운드","k":"가중시키다"},"serve":{"p":"썰브","k":"복무하다"},"may":{"p":"메이","k":"~해도 좋다"},"shorter":{"p":"숄트","k":"키가 작은, 짧은"},"same":{"p":"쎄임","k":"같은, 동일한"},"speed":{"p":"","k":"속도"},"ground":{"p":"그라운드","k":"땅, 용지"},"body":{"p":"바디","k":"몸, 신체"},"health":{"p":"헬뜨","k":"건강"},"daily":{"p":"데일리","k":"매일의"},"regularly":{"p":"","k":"규칙적인"},"thicker":{"p":"띡","k":"두꺼운"},"conditions":{"p":"","k":"상태"},"non-experts":{"p":"난 엑스펄트","k":"비전문가"},"from":{"p":"프럼","k":"~에서, ~부터"},"have":{"p":"해브","k":"먹다"},"absolute":{"p":"앱썰룻","k":"절대적인"},"height":{"p":"하잇","k":"정점, 절정"},"will":{"p":"","k":"의지"},"although":{"p":"","k":"비록 ~일지라도"},"top":{"p":"탑","k":"맨 위, 정상; 맨 위의, 정상의"},"mean":{"p":"민","k":"의미하다"},"increased":{"p":"인크뤼스","k":"증가하다, 증가"},"taller":{"p":"털","k":"키가 큰, 높은"},"bones":{"p":"보운","k":"뼈"},"adults":{"p":"어덜트","k":"성인"},"injuries":{"p":"인져뤼","k":"부상"},"serious":{"p":"씨뤼어쓰","k":"심각한"},"relationship":{"p":"뤼레이션쉽","k":"관계, 관련성"},"enough":{"p":"인어프","k":"충분한; 충분히"},"between":{"p":"비트윈","k":"(2개)사이에"},"terms":{"p":"","k":"임기"},"reasons":{"p":"뤼즌","k":"이유; 추론하다"},"comparison":{"p":"컴패뤼슨","k":"비교"},"toddlers":{"p":"타들럴","k":"아장아장 걷는 아기 (각주)"},"bone":{"p":"보운","k":"뼈"},"through":{"p":"뜨루","k":"~을 통해 (관통하여),~사이로"},"over":{"p":"오벌","k":"~ 위에[위로]"},"people":{"p":"피쁠","k":"사람들"},"reactions":{"p":"뤼액션","k":"반응, 반작용"},"means":{"p":"","k":"수단"},"thick":{"p":"띡","k":"두꺼운"},"compensate":{"p":"","k":"상쇄[보충]하다"},"someone":{"p":"썸원","k":"누군가, 어떤 사람"},"slower":{"p":"슬로우","k":"느린"},"suffer":{"p":"써펄","k":"더 나빠지다"},"found":{"p":"파운드","k":"설립하다"},"bumping":{"p":"범프","k":"부딪히다"},"falling":{"p":"펄","k":"몰락, 함락되다"},"energy":{"p":"에널쥐","k":"에너지, 기운"},"despite":{"p":"디스빠잇","k":"(~에도) 불구하고"},"caused":{"p":"코즈","k":"원인; 야기하다"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"strength":{"p":"스뜨뤵뜨","k":"힘, 강점"},"much":{"p":"머취","k":"(양이) 많은"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

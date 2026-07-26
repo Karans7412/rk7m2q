@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-20","y":2026,"m":6,"q":20,"type":"주장","instr":"다음 글에서 필자가 주장하는 바로 가장 적절한 것은?","given":"","psg":"Instructors of physical activities often focus more on the activities themselves than on the participants who perform them. People may believe that training our bodies is unrelated to training our minds. However, participants' minds determine their attitudes and level of effort toward physical development. In usual practice, instructors may just tell their participants to exercise regularly, warm up before exercising, or use a particular strategy. However, it is not sufficient for instructors to expect participants to blindly follow their directions in physical activities. Instructors must raise participants' awareness of how these activities enhance their physical performance. For example, an instructor could explicitly explain how warming up before exercising improves their performances. If participants understand the principles of these activities, it enables them to gradually take fuller ownership of their own development.","ch":["체육 교육은 학습자의 역량 향상을 위해 이론보다 실습을 강조해야 한다.","체육 활동은 참여자의 적성을 발굴하고 개발하는 데 집중해야 한다.","체육 지도자는 참여자가 체육 활동의 원리를 알고 훈련하도록 도와야 한다.","체육 프로그램은 참여자의 편의를 위해 단계적으로 계획되어야 한다.","체육 수업은 각 개인의 신체 능력에 맞는 다양한 활동을 제공해야 한다."],"ans":3,"pts":2,"foot":[],"needImg":false,"sents":[{"ck":[["Instructors of physical activities","신체 활동 지도자들은"],["often focus more","흔히 더 집중한다"],["on the activities themselves","활동 그 자체에"],["than on the participants","참여자들보다"],["who perform them.","그것을 수행하는"]],"g":"체육 지도자들은 활동을 하는 사람보다 활동 자체에 더 신경 쓰는 경우가 많다."},{"ck":[["People may believe","사람들은 믿을지도 모른다"],["that training our bodies","우리 몸을 훈련하는 것이"],["is unrelated to","~과 무관하다고"],["training our minds.","우리 마음을 훈련하는 것과"]],"g":"몸을 단련하는 일과 마음을 단련하는 일은 별개라고 여기기 쉽다."},{"ck":[["However,","그러나"],["participants' minds determine","참여자들의 마음이 결정한다"],["their attitudes and level of effort","그들의 태도와 노력의 수준을"],["toward physical development.","신체 발달을 향한"]],"g":"하지만 참여자의 <b>마음</b>이 신체 발달에 대한 태도와 노력의 크기를 좌우한다."},{"ck":[["In usual practice,","평소 연습에서"],["instructors may just tell","지도자들은 그저 말할지도 모른다"],["their participants","참여자들에게"],["to exercise regularly,","규칙적으로 운동하라고"],["warm up before exercising,","운동 전에 몸을 풀라고"],["or use a particular strategy.","혹은 특정 전략을 쓰라고"]],"g":"평소에는 '규칙적으로 해라, 준비운동 해라, 이 방법을 써라'라고 지시만 하기 쉽다."},{"ck":[["However,","그러나"],["it is not sufficient","충분하지 않다"],["for instructors to expect","지도자들이 기대하는 것은"],["participants to blindly follow","참여자들이 맹목적으로 따르기를"],["their directions","자신의 지시를"],["in physical activities.","신체 활동에서"]],"g":"하지만 참여자가 시키는 대로 무작정 따르기만 바라는 것으로는 <b>부족하다.</b>"},{"ck":[["Instructors must raise","지도자들은 높여야만 한다"],["participants' awareness","참여자들의 인식을"],["of how these activities enhance","이 활동들이 어떻게 향상시키는지에 대한"],["their physical performance.","그들의 신체 수행을"]],"g":"지도자는 <b>이 활동이 왜 수행을 좋아지게 하는지</b>를 참여자가 알게 해 줘야 한다."},{"ck":[["For example,","예를 들어"],["an instructor could explicitly explain","지도자는 명시적으로 설명할 수 있다"],["how warming up before exercising","운동 전 몸풀기가 어떻게"],["improves their performances.","그들의 수행을 향상시키는지를"]],"g":"가령 준비운동이 수행을 어떻게 끌어올리는지 분명히 말로 설명해 주는 것이다."},{"ck":[["If participants understand","참여자들이 이해한다면"],["the principles of these activities,","이 활동들의 원리를"],["it enables them","그것은 그들이 ~할 수 있게 한다"],["to gradually take fuller ownership","점차 더 완전한 주인 노릇을 하도록"],["of their own development.","자기 자신의 발달에 대해"]],"g":"원리를 이해하면 참여자는 점점 자기 발달의 <b>주인</b>이 되어 간다."}],"theme":"체육 지도자가 <b>동작만 시키지 말고 그 동작의 원리를 알려 줘야 한다</b>는 주장이다. 흔히 지도자는 활동 자체에만 집중하고, 몸 훈련과 마음 훈련은 별개라고 여긴다. 그러나 참여자의 <b>마음</b>이 태도와 노력의 수준을 정한다. '규칙적으로 해라, 준비운동 해라'처럼 지시만 하고 맹목적으로 따르기를 기대하는 것으로는 부족하고, 준비운동이 수행을 어떻게 좋아지게 하는지까지 설명해야 한다. 원리를 이해해야 참여자가 자기 발달의 <b>주인</b>이 된다.","why":"주장 문제는 <i>must</i>·<i>it is not sufficient</i>처럼 <b>당위를 드러내는 표현</b>에 답이 붙습니다. <i>Instructors must raise participants' awareness of how these activities enhance their physical performance</i>가 곧 ③입니다.","rub":[["① 체육 지도자","지도자 · 강사 · 선생 · 코치 · 가르치는 사람 · 체육"],["② 원리를 알려 줌","원리 · 이유 · 왜 · 설명 · 알려 · 이해 · 인식"],["③ 참여자 스스로 주도","스스로 · 주인 · 자기 주도 · 능동 · 자발 · 책임"]],"dic":{"instructor":{"p":"인스트뤅털","k":"지도자, 강사"},"physical":{"p":"피지컬","k":"신체의, 물리적인"},"participant":{"p":"팔티써펀트","k":"참여자"},"perform":{"p":"펄폼","k":"수행하다"},"be unrelated to":{"p":"언륄레이릿","k":"~과 무관하다"},"determine":{"p":"디털민","k":"결정하다"},"attitude":{"p":"애리튜드","k":"태도"},"regularly":{"p":"뤠귤럴리","k":"규칙적으로"},"warm up":{"p":"웜 업","k":"몸을 풀다, 준비운동하다"},"particular":{"p":"펄티큘럴","k":"특정한"},"strategy":{"p":"스트뢔러지","k":"전략"},"sufficient":{"p":"써피션트","k":"충분한"},"blindly":{"p":"블라인들리","k":"맹목적으로"},"direction":{"p":"디뤡션","k":"지시, 지도"},"awareness":{"p":"어웨얼니스","k":"인식, 자각"},"enhance":{"p":"인핸스","k":"향상시키다"},"performance":{"p":"펄포먼스","k":"수행, 성과"},"explicitly":{"p":"익스플리씻리","k":"명시적으로, 분명하게"},"principle":{"p":"프륀써플","k":"원리, 원칙"},"gradually":{"p":"그뢔주얼리","k":"점차, 서서히"},"ownership":{"p":"오우널십","k":"소유권, 주인의식"},"may":{"p":"메이","k":"~해도 좋다"},"improves":{"p":"임프루브","k":"향상시키다, 개선하다"},"expect":{"p":"","k":"기대하다"},"before":{"p":"비펄","k":"~ 전에"},"however":{"p":"하우에벌","k":"그러나, 그렇지만"},"own":{"p":"오운","k":"소유하다, 자기 자신의"},"understand":{"p":"언덜스탠드","k":"이해하다"},"activities":{"p":"액티비피","k":"활동, 움직임"},"directions":{"p":"디뤡션","k":"지시, 지도"},"effort":{"p":"에펄트","k":"시도"},"participants'":{"p":"팔티써펀트","k":"참여자"},"fuller":{"p":"풀","k":"배부른"},"take":{"p":"테익","k":"가져오다, 데려오다"},"attitudes":{"p":"애리튜드","k":"태도"},"focus":{"p":"포우꺼쓰","k":"집중하다, 초점"},"toward":{"p":"투월드","k":"~을 향해서, ~쪽으로"},"participants":{"p":"팔티써펀트","k":"참여자"},"often":{"p":"어픈","k":"종종, 자주"},"people":{"p":"피쁠","k":"사람들"},"tell":{"p":"텔","k":"알리다, 말하다"},"explain":{"p":"익스플레인","k":"설명하다"},"enables":{"p":"이네이블","k":"할 수 있게 하다, 가능하게 하다"},"exercise":{"p":"엑썰싸이즈","k":"(권력·권리·역량 등을) 행사[발휘]하다"},"must":{"p":"머스트","k":"~해야 한다,~임이 틀림없다"},"instructors":{"p":"인스트뤅털","k":"지도자, 강사"},"performances":{"p":"펄포먼스","k":"수행, 성과"},"follow":{"p":"팔로우","k":"따르다, 따라가다"},"principles":{"p":"프륀써플","k":"원리, 원칙"},"use":{"p":"유즈","k":"사용하다"},"warming":{"p":"워밍","k":"온난화, 데우기"},"warm":{"p":"웜","k":"따뜻한"},"practice":{"p":"프랙티쓰","k":"관습"},"exercising":{"p":"엑썰싸이즈","k":"(권력·권리·역량 등을) 행사[발휘]하다"},"bodies":{"p":"바디","k":"몸, 신체"},"minds":{"p":"마인드","k":"신경을 쓰다, 꺼리다"},"believe":{"p":"빌리브","k":"믿다, 생각하다"},"development":{"p":"디벨럽먼트","k":"전개부"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

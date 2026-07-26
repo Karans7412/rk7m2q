@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-40","y":2026,"m":6,"q":40,"type":"요약문","instr":"다음 글의 내용을 한 문장으로 요약하고자 한다. 빈칸 (A), (B)에 들어갈 말로 가장 적절한 것은?","given":"","psg":"In the pharmaceutical industry, algorithms are being employed to find treatments and drugs for rare diseases that to date haven't received much attention. The hard truth has always been that pharma devotes more research and development resources to diseases that affect the rich. The definition of rare has too often been associated with poor ― that is, even if a disease is quite prevalent in a population that cannot afford to pay for it (for example, people living in the developing world), the disease has been neglected compared to First World illnesses. By lowering the cost of data collection, mining, and analysis in drug development and clinical trials, AI can help offset imbalances in the pharmaceutical industry that direct attention to diseases that \"pay,\" whether because the disease is more common or because it is prevalent among demographics that can pay more. We see the democratizing power of AI to broaden the attention of the medical and research communities to find cures to traditionally neglected health issues and among traditionally neglected populations. → By lowering the cost of pharmaceutical research and development, AI can help reduce the imbalance in investment that has led to the _____ (A) of less profitable diseases, thereby broadening the focus of medical research to include _____ (B) populations.","ch":["prevention……marginalized","spread ……general","overlook ……native","ignorance……wealthy","disregard ……underserved"],"ans":5,"pts":2,"foot":[{"word":"offset","gloss":"상쇄하다"},{"word":"demographic","gloss":"인구 집단"}],"needImg":false,"sents":[{"ck":[["In the pharmaceutical industry,","제약 산업에서는"],["algorithms are being employed","알고리즘이 활용되고 있다"],["to find treatments and drugs for rare diseases","희귀 질병의 치료법과 약을 찾기 위해"],["that to date haven't received much attention.","지금까지 큰 관심을 받지 못했던"]],"g":"제약 산업에서는 그동안 외면받던 희귀 질병의 치료법과 약을 찾는 데 알고리즘이 쓰이고 있다."},{"ck":[["The hard truth has always been","냉혹한 진실은 언제나 ~였다"],["that pharma devotes more research and development resources","제약사가 더 많은 연구개발 자원을 쏟는다는 것"],["to diseases that affect the rich.","부유한 사람들이 걸리는 질병에"]],"g":"냉정한 사실은, 제약사가 <b>부자가 걸리는 병</b>에 연구개발 자원을 더 붓는다는 것이다."},{"ck":[["The definition of rare","'희귀하다'는 것의 정의는"],["has too often been associated with poor","너무나 자주 가난과 연결되어 왔다"],["― that is, even if a disease is quite prevalent","― 즉 어떤 질병이 꽤 널리 퍼져 있어도"],["in a population that cannot afford to pay for it","그 비용을 감당할 수 없는 인구 집단에서"],["(for example, people living in the developing world),","(예를 들어 개발도상국에 사는 사람들),"],["the disease has been neglected","그 질병은 등한시되어 왔다"],["compared to First World illnesses.","선진국 질환에 비해"]],"g":"'희귀'는 사실상 '가난'과 붙어 다녔다 — 개발도상국에 아무리 흔해도, 값을 못 치르면 선진국 질환에 밀려 <b>방치</b>됐다."},{"ck":[["By lowering the cost of data collection, mining, and analysis","데이터 수집·마이닝·분석 비용을 낮춤으로써"],["in drug development and clinical trials,","신약 개발과 임상시험에서"],["AI can help offset imbalances","AI는 불균형을 상쇄하도록 도울 수 있다"],["in the pharmaceutical industry","제약 산업의"],["that direct attention to diseases that \"pay,\"","'돈이 되는' 질병으로 관심을 돌리게 하는"],["whether because the disease is more common","그 질병이 더 흔해서든"],["or because it is prevalent among demographics that can pay more.","혹은 더 많이 낼 수 있는 집단에 널리 퍼져서든"]],"g":"AI가 데이터와 임상시험 비용을 낮추면, '<b>돈 되는</b>' 병에만 관심이 쏠리게 만든 제약 산업의 불균형을 상쇄할 수 있다."},{"ck":[["We see the democratizing power of AI","우리는 AI의 민주화하는 힘을 본다"],["to broaden the attention","관심을 넓히는"],["of the medical and research communities","의료계와 연구계의"],["to find cures to traditionally neglected health issues","전통적으로 외면된 건강 문제의 치료법을 찾도록"],["and among traditionally neglected populations.","그리고 전통적으로 외면된 사람들 사이에서"]],"g":"AI의 <b>민주화하는 힘</b>이 의료·연구계의 시야를 오래 외면받은 질병과 사람들에게로 넓혀 준다."},{"ck":[["→ By lowering the cost of pharmaceutical research and development,","→ 제약 연구개발 비용을 낮춤으로써"],["AI can help reduce the imbalance in investment","AI는 투자 불균형을 줄이도록 도울 수 있다"],["that has led to the _____ (A) of less profitable diseases,","수익성이 낮은 질병에 대한 _____(A)를 낳았던"],["thereby broadening the focus of medical research","그리하여 의학 연구의 초점을 넓혀"],["to include _____ (B) populations.","_____(B) 사람들까지 포함하도록"]],"g":"→ 연구개발 비용을 낮춤으로써 AI는 수익성 낮은 질병을 <b>무시(disregard)</b>하게 만든 투자 불균형을 줄이고, 의학 연구의 초점을 <b>혜택에서 소외된(underserved)</b> 사람들까지 넓힌다."}],"theme":"제약 산업의 <b>불균형을 AI가 줄일 수 있다</b>는 글이다. 제약사는 늘 <b>돈 되는 병</b>, 즉 부유층이 걸리는 질병에 연구개발 자원을 더 쏟아 왔다. '희귀병'이라는 말은 사실상 '가난한 사람의 병'과 붙어 다녔다 — 개발도상국에 아무리 흔한 병이라도 값을 치를 수 없으면 선진국 질환에 밀려 방치됐다. AI가 데이터 수집·분석과 임상시험 비용을 낮추면, '<b>돈이 되는</b>' 질병 쪽으로만 관심이 쏠리게 만든 그 불균형을 상쇄할 수 있다. 그래서 의료·연구계의 관심이 <b>전통적으로 소외된</b> 질병과 사람들에게로 넓어진다.","why":"(A)는 '수익성이 낮은 질병에 대한 <u>____</u>를 낳은 투자 불균형'입니다. 본문의 <i>neglected</i>(방치·등한시)를 받아야 하므로 <b>disregard(무시)</b>. (B)는 '연구의 초점을 <u>____</u> 사람들에게로 넓힌다'이므로 <i>traditionally neglected populations</i>를 받는 <b>underserved(충분한 혜택을 못 받는)</b>. 답은 ⑤. ④ ignorance는 '무지'라 뜻이 어긋나고, wealthy는 방향이 반대입니다.","rub":[["① 돈 되는 병에 쏠린 연구","돈 · 수익 · 부유 · 부자 · 선진국 · 쏠 · 편중 · 불균형"],["② 가난한 쪽 질병은 방치","가난 · 개발도상국 · 희귀 · 방치 · 무시 · 소외 · 외면"],["③ AI가 비용을 낮춰 넓힘","AI · 알고리즘 · 비용 · 낮 · 줄 · 넓 · 확대 · 관심 · 민주화"]],"dic":{"pharmaceutical":{"p":"팔머쑤리컬","k":"제약의"},"algorithm":{"p":"앨거뤼듬","k":"알고리즘"},"employ":{"p":"임플로이","k":"활용하다, 쓰다"},"treatment":{"p":"트륏먼트","k":"치료(법)"},"rare disease":{"p":"뤠얼 디지즈","k":"희귀 질병"},"to date":{"p":"투 데잇","k":"지금까지"},"devote":{"p":"디보웃","k":"쏟다, 바치다"},"resource":{"p":"뤼쏠스","k":"자원"},"definition":{"p":"데퍼니션","k":"정의"},"be associated with":{"p":"어쏘우씨에이릿","k":"~와 연관되다"},"prevalent":{"p":"프뤠벌런트","k":"널리 퍼진"},"afford to":{"p":"어폴드 투","k":"~할 여유가 있다"},"the developing world":{"p":"디벨러핑 월드","k":"개발도상국"},"neglect":{"p":"니글렉트","k":"등한시하다, 방치하다"},"first world":{"p":"펄스트 월드","k":"선진국"},"data mining":{"p":"데이러 마이닝","k":"데이터 마이닝(자료 캐기)"},"clinical trial":{"p":"클리니컬 트롸이얼","k":"임상시험"},"offset":{"p":"오프쎗","k":"상쇄하다 (각주)"},"imbalance":{"p":"임밸런스","k":"불균형"},"direct attention to":{"p":"디뤡트","k":"~로 관심을 돌리다"},"demographic":{"p":"데머그뢔픽","k":"인구 집단 (각주)"},"democratize":{"p":"디마크뤄타이즈","k":"민주화하다"},"broaden":{"p":"브로우든","k":"넓히다"},"cure":{"p":"큐얼","k":"치료법"},"profitable":{"p":"프뤄피러블","k":"수익성 있는"},"disregard":{"p":"디스뤼갈드","k":"무시, 등한시"},"underserved":{"p":"언덜썰브드","k":"충분한 혜택을 받지 못하는"},"developing":{"p":"디벨럽","k":"발달시키다, 개발하다"},"date":{"p":"데이트","k":"날짜"},"afford":{"p":"어폴드","k":"제공하다"},"cures":{"p":"큐얼","k":"치료법"},"demographics":{"p":"데머그뢔픽","k":"인구 집단 (각주)"},"spread":{"p":"스프레드","k":"퍼지다, 확산되다"},"employed":{"p":"임플로이","k":"활용하다, 쓰다"},"pay":{"p":"페이","k":"지불하다"},"health":{"p":"헬뜨","k":"건강"},"illnesses":{"p":"일니스","k":"병, 질환"},"direct":{"p":"","k":"직접적인"},"clinical":{"p":"클리니컬","k":"임상의"},"pharma":{"p":"","k":"제약 회사"},"trials":{"p":"트롸이얼","k":"재판"},"hard":{"p":"할드","k":"어려운, 엄연한"},"diseases":{"p":"디지즈","k":"질병"},"analysis":{"p":"어낼러시스","k":"분석"},"rare":{"p":"","k":"희귀한"},"always":{"p":"얼웨이즈","k":"항상, 언제나"},"communities":{"p":"커뮤니디","k":"군집"},"investment":{"p":"인베스먼트","k":"투자, 투자금"},"rich":{"p":"뤼취","k":"다채로운, 풍부한"},"research":{"p":"뤼썰치","k":"연구, 조사"},"native":{"p":"네이티브","k":"토착의, 원주민"},"overlook":{"p":"오벌룩","k":"간과하다"},"drug":{"p":"드뤄그","k":"약, 약물"},"reduce":{"p":"뤼듀스","k":"줄이다, 감소시키다"},"focus":{"p":"포우꺼쓰","k":"집중하다, 초점"},"ignorance":{"p":"","k":"무지"},"poor":{"p":"푸얼","k":"가난한"},"include":{"p":"","k":"포함하다"},"medical":{"p":"메디컬","k":"의학의, 의료의"},"attention":{"p":"어텐션","k":"관심"},"among":{"p":"어멍","k":"(3개이상)~사이에"},"often":{"p":"어픈","k":"종종, 자주"},"being":{"p":"","k":"존재"},"traditionally":{"p":"","k":"전통적으로"},"thereby":{"p":"","k":"그렇게 함으로써"},"wealthy":{"p":"웰띠","k":"부유한, 부자의"},"neglected":{"p":"니글렉트","k":"등한시하다, 방치하다"},"disease":{"p":"디지즈","k":"질병"},"received":{"p":"뤼씨브","k":"받다, 받아들이다"},"people":{"p":"피쁠","k":"사람들"},"algorithms":{"p":"앨거뤼듬","k":"알고리즘"},"compared":{"p":"컴페얼","k":"비교하다, 비유하다"},"affect":{"p":"어펙트","k":"감정"},"common":{"p":"카먼","k":"흔한"},"devotes":{"p":"디보웃","k":"쏟다, 바치다"},"prevention":{"p":"프뤼벤션","k":"예방"},"associated":{"p":"","k":"결합된"},"resources":{"p":"뤼쏠스","k":"자원"},"power":{"p":"파월","k":"권력, 힘"},"collection":{"p":"","k":"소장품"},"issues":{"p":"","k":"주제, 쟁점, 사안"},"led":{"p":"리드","k":"안내하다"},"first":{"p":"펄스트","k":"첫 번째의"},"democratizing":{"p":"디마크뤄타이즈","k":"민주화하다"},"find":{"p":"파인드","k":"발견하다"},"drugs":{"p":"드뤄그","k":"약, 약물"},"industry":{"p":"인더스트뤼","k":"산업, 공업"},"broadening":{"p":"브로우든","k":"넓히다"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"help":{"p":"헬프","k":"돕다; 도움"},"imbalances":{"p":"임밸런스","k":"불균형"},"general":{"p":"","k":"일반적인"},"see":{"p":"씨","k":"보다"},"development":{"p":"디벨럽먼트","k":"전개부"},"cost":{"p":"코스트","k":"비용, 값, 비용이 들다"},"much":{"p":"머취","k":"(양이) 많은"},"population":{"p":"파퓰레이션","k":"인구 (집단)"},"treatments":{"p":"트륏먼트","k":"치료(법)"},"lowering":{"p":"","k":"낮추다"},"populations":{"p":"파퓰레이션","k":"인구 (집단)"},"data":{"p":"데이러","k":"자료, 데이터"},"has":{"p":"해브","k":"먹다"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

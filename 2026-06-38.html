@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-38","y":2026,"m":6,"q":38,"type":"문장삽입","instr":"글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.","given":"To minimize vortex shedding, skyscraper designers do everything in their powers to confuse the wind.","psg":"To minimize building costs and maximize revenues, skyscrapers generally take the shape of squares or rectangles. These are not particularly aerodynamic shapes, and this results in a wind phenomenon called \"vortex shedding.\" As wind meets a rectangular skyscraper it pushes on the flat face of the building before flowing around its sides, where eventually it separates from the face of the structure. ( ①) The difference in pressures on the front and back faces of the building gives rise to vortices, or spinning currents of wind, that flow downstream from the building. ( ②) The vortices pull and push the building in a direction perpendicular to the wind at frequencies that can become dangerously self-sustaining. ( ③) Orienting the building so that the longer face of the structure is parallel with prevailing winds can help. ( ④) Chopping or rounding off corners of a building can likewise make it more aerodynamic. ( ⑤) Roughing up the corners of the building through the careful placement of balconies or stepped corners can help by disturbing or delaying the formation of strong vortices.","ch":[],"ans":3,"pts":2,"foot":[{"word":"vortex","gloss":"회오리바람"},{"word":"perpendicular","gloss":"직각을 이루는"}],"needImg":false,"sents":[{"ck":[["To minimize vortex shedding,","와류 방출을 최소화하기 위해"],["skyscraper designers do everything in their powers","초고층 빌딩 설계자들은 힘닿는 모든 것을 한다"],["to confuse the wind.","바람을 교란시키려고"]],"g":"<b>[주어진 문장]</b> 와류를 줄이려고 초고층 설계자들은 바람을 헷갈리게 만들 수 있는 모든 수를 쓴다."},{"ck":[["To minimize building costs and maximize revenues,","건축 비용을 최소화하고 수익을 극대화하기 위해"],["skyscrapers generally take the shape","초고층 빌딩은 일반적으로 형태를 취한다"],["of squares or rectangles.","정사각형이나 직사각형의"]],"g":"비용을 줄이고 수익을 키우려다 보니 초고층 건물은 대체로 네모난 형태가 된다."},{"ck":[["These are not particularly aerodynamic shapes,","이것들은 특별히 공기역학적인 형태가 아니다"],["and this results in a wind phenomenon","그리고 이는 바람 현상을 초래한다"],["called \"vortex shedding.\"","'와류 방출'이라 불리는"]],"g":"그런데 네모는 공기역학적이지 않아서 <b>'와류 방출'</b>이라는 바람 현상을 부른다."},{"ck":[["As wind meets a rectangular skyscraper","바람이 직사각형 초고층 빌딩을 만나면"],["it pushes on the flat face of the building","그것은 건물의 평평한 면을 민다"],["before flowing around its sides,","옆면을 돌아 흐르기 전에"],["where eventually it separates","그리고 그곳에서 결국 분리된다"],["from the face of the structure.","구조물의 표면으로부터"]],"g":"바람은 평평한 앞면을 밀고 옆으로 돌아 흐르다가, 결국 건물 표면에서 떨어져 나간다."},{"ck":[["( ①) The difference in pressures","( ①) 압력의 차이는"],["on the front and back faces of the building","건물의 앞면과 뒷면에 가해지는"],["gives rise to vortices,","회오리를 발생시킨다"],["or spinning currents of wind,","즉 회전하는 기류를"],["that flow downstream from the building.","건물에서 하류로 흐르는"]],"g":"앞뒤 면의 압력 차가 회오리, 곧 건물 뒤로 흘러가는 회전 기류를 만들어 낸다."},{"ck":[["( ②) The vortices pull and push the building","( ②) 그 회오리는 건물을 당기고 민다"],["in a direction perpendicular to the wind","바람과 직각인 방향으로"],["at frequencies","어떤 진동수로"],["that can become dangerously self-sustaining.","위험할 정도로 스스로 유지될 수 있는"]],"g":"회오리는 바람과 <b>직각 방향</b>으로 건물을 흔드는데, 그 진동이 스스로 커져 위험해질 수 있다."},{"ck":[["( ③) Orienting the building","( ③) 건물의 방향을 잡는 것이"],["so that the longer face of the structure","구조물의 더 긴 면이"],["is parallel with prevailing winds","주로 부는 바람과 평행하도록"],["can help.","도움이 될 수 있다"]],"g":"긴 면이 주풍향과 나란해지도록 건물을 앉히면 도움이 된다."},{"ck":[["( ④) Chopping or rounding off corners of a building","( ④) 건물 모서리를 잘라 내거나 둥글게 하는 것도"],["can likewise make it more aerodynamic.","마찬가지로 그것을 더 공기역학적으로 만들 수 있다"]],"g":"모서리를 잘라 내거나 둥글리는 것도 마찬가지로 공기 흐름을 좋게 한다."},{"ck":[["( ⑤) Roughing up the corners of the building","( ⑤) 건물의 모서리를 거칠게 만드는 것은"],["through the careful placement of balconies or stepped corners","발코니나 계단식 모서리를 신중히 배치하여"],["can help by disturbing or delaying","방해하거나 지연시킴으로써 도움이 될 수 있다"],["the formation of strong vortices.","강한 회오리의 형성을"]],"g":"발코니나 계단식 모서리로 모서리를 거칠게 만들면 강한 회오리가 만들어지는 것을 방해하거나 늦출 수 있다."}],"theme":"초고층 빌딩과 <b>바람</b>의 싸움이다. 비용을 줄이고 수익을 키우려다 보니 건물은 대개 사각형이 되는데, 이는 공기역학적이지 않아 <b>와류 방출(vortex shedding)</b>을 일으킨다. 바람이 평평한 면을 밀고 옆으로 흐르다 떨어져 나가면서 앞뒤 압력 차가 생기고, 그 회오리가 바람과 <b>직각 방향</b>으로 건물을 밀고 당기는데 그 진동수가 위험하게 스스로 커질 수 있다. 그래서 설계자들은 바람을 <b>헷갈리게</b> 만든다 — 긴 면을 주풍향과 나란히 두고, 모서리를 자르거나 둥글게 하고, 발코니·계단식 모서리로 모서리를 거칠게 해 회오리 형성을 방해한다.","why":"①②는 <b>문제</b>(압력 차 → 회오리 → 위험한 진동)를 설명하고, ③부터는 <i>can help</i>, <i>likewise</i>가 이어지는 <b>해법</b>입니다. 주어진 문장은 '와류를 줄이려고 설계자들이 바람을 교란한다'는 <b>해법의 총론</b>이므로, 문제 설명이 끝나고 개별 해법이 시작되기 직전인 <b>③</b>에 들어갑니다.","rub":[["① 네모난 초고층 빌딩","초고층 · 빌딩 · 건물 · 네모 · 사각 · 직사각"],["② 와류가 건물을 흔듦","와류 · 회오리 · 소용돌이 · 바람 · 흔들 · 진동 · 위험"],["③ 형태를 바꿔 바람을 교란","모서리 · 둥글 · 자르 · 방향 · 평행 · 발코니 · 교란 · 방해 · 줄이"]],"dic":{"minimize":{"p":"미니마이즈","k":"최소화하다"},"vortex":{"p":"볼텍스","k":"회오리, 소용돌이 (각주)"},"vortex shedding":{"p":"볼텍스 셰딩","k":"와류 방출"},"skyscraper":{"p":"스카이스크뤠이펄","k":"초고층 빌딩"},"confuse":{"p":"컨퓨즈","k":"교란하다, 헷갈리게 하다"},"revenue":{"p":"뤠버뉴","k":"수익"},"rectangle":{"p":"뤡탱글","k":"직사각형"},"aerodynamic":{"p":"에어로우다이내믹","k":"공기역학적인"},"phenomenon":{"p":"퍼나머난","k":"현상"},"flat face":{"p":"플랫 페이스","k":"평평한 면"},"separate from":{"p":"쎄퍼뤠잇","k":"~에서 분리되다"},"structure":{"p":"스트뤅철","k":"구조물"},"pressure":{"p":"프뤠셜","k":"압력"},"give rise to":{"p":"깁 롸이즈 투","k":"~을 일으키다"},"spinning":{"p":"스피닝","k":"회전하는"},"current":{"p":"커뤈트","k":"기류, 흐름"},"downstream":{"p":"다운스트륌","k":"하류로"},"perpendicular":{"p":"펄펀디큘럴","k":"직각인 (각주)"},"frequency":{"p":"프뤼퀀씨","k":"진동수, 주파수"},"self-sustaining":{"p":"쎌프 써스테이닝","k":"스스로 유지되는"},"orient":{"p":"오뤼엔트","k":"방향을 맞추다"},"parallel with":{"p":"패뤄렐","k":"~과 평행한"},"prevailing wind":{"p":"프뤼베일링 윈드","k":"주풍(主風), 주로 부는 바람"},"chop off":{"p":"찹 오프","k":"잘라 내다"},"round off":{"p":"롸운드 오프","k":"둥글게 만들다"},"likewise":{"p":"라익와이즈","k":"마찬가지로"},"rough up":{"p":"뤄프 업","k":"거칠게 만들다"},"placement":{"p":"플레이스먼트","k":"배치"},"stepped":{"p":"스텝트","k":"계단식의"},"disturb":{"p":"디스털브","k":"방해하다"},"formation":{"p":"폴메이션","k":"형성"},"before":{"p":"비펄","k":"~ 전에"},"shapes":{"p":"쉐이프","k":"모양, ~모양으로 만들다"},"roughing":{"p":"","k":"거친"},"faces":{"p":"페이쓰","k":"~을 마주보다, 직면하다"},"disturbing":{"p":"","k":"불안하게 만드는"},"parallel":{"p":"패뤄렐","k":"나"},"currents":{"p":"커뤈트","k":"기류, 흐름"},"flow":{"p":"","k":"흐름, 흐르다"},"powers":{"p":"파월","k":"권력, 힘"},"frequencies":{"p":"프뤼퀀씨","k":"진동수, 주파수"},"generally":{"p":"","k":"일반적인"},"face":{"p":"페이쓰","k":"~을 마주보다, 직면하다"},"off":{"p":"오프","k":"떨어져,(무엇이) 제거되어"},"from":{"p":"프럼","k":"~에서, ~부터"},"back":{"p":"백","k":"뒤,등, 다시 돌아서"},"dangerously":{"p":"대인졀러스","k":"위험한"},"take":{"p":"테익","k":"가져오다, 데려오다"},"flowing":{"p":"","k":"흐름, 흐르다"},"become":{"p":"비컴","k":"~이 되다"},"rectangles":{"p":"뤡탱글","k":"직사각형"},"sides":{"p":"사이드","k":"~을 옆으로 밀어내다"},"prevailing":{"p":"","k":"주요한, 지배적인"},"shape":{"p":"쉐이프","k":"모양, ~모양으로 만들다"},"costs":{"p":"코스트","k":"비용, 값, 비용이 들다"},"front":{"p":"프뤈트","k":"선지급으로"},"through":{"p":"뜨루","k":"~을 통해 (관통하여),~사이로"},"results":{"p":"뤼절트","k":"결과; 결과로 생기다"},"skyscrapers":{"p":"스카이스크뤠이펄","k":"초고층 빌딩"},"rounding":{"p":"롸운드","k":"둥근, 동그란"},"orienting":{"p":"오뤼엔트","k":"방향을 맞추다"},"revenues":{"p":"뤠버뉴","k":"수익"},"delaying":{"p":"","k":"지연"},"separates":{"p":"","k":"분리하다"},"around":{"p":"어롸운드","k":"주위에, 주변에"},"flat":{"p":"플랫","k":"평평한, 바람이 빠진"},"called":{"p":"콜","k":"부르다, 전화하다"},"difference":{"p":"디퍼뤈스","k":"차이"},"pressures":{"p":"프뤠셜","k":"압력"},"meets":{"p":"","k":"충족시키다"},"particularly":{"p":"","k":"특히"},"corners":{"p":"콜널","k":"모퉁이, 구석"},"direction":{"p":"","k":"지도, 지시"},"longer":{"p":"롱","k":"긴"},"careful":{"p":"캘풀","k":"조심성있는 신중한"},"help":{"p":"헬프","k":"돕다; 도움"},"strong":{"p":"스뜨뤙","k":"강한"},"eventually":{"p":"이벤츄얼리","k":"결국"},"rise":{"p":"","k":"출현, 발생"},"building":{"p":"빌딩","k":"건물"},"maximize":{"p":"맥써마이즈","k":"극대화하다"},"pull":{"p":"풀","k":"끌다, 잡아 당기다"},"squares":{"p":"스꿰얼","k":"광장; 정사각형"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

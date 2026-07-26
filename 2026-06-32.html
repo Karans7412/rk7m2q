@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-32","y":2026,"m":6,"q":32,"type":"빈칸추론","instr":"다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.","given":"","psg":"Speakers don't always put everything that's important to them into words. Very often you can understand a speaker's meaning by observing their nonverbal behaviors such as a change in a vocal tone or volume, eye contact, facial expressions and gestures. As it is easy to misinterpret nonverbal behavior, effective listeners verbally confirm their interpretations of someone's nonverbal communication. A question as simple as \"Do your nods indicate a yes vote?\" can make sure that everyone is on the same wavelength. If, as nonverbal research indicates, more than half of a speaker's meaning is conveyed nonverbally, we are missing a lot of important information if we fail to \"listen\" to nonverbal behavior. Even Freud suggested that \"he that has eyes to see and ears to hear may convince himself that no mortal can keep a secret. If his lips are silent, he chatters with his fingertips; betrayal oozes out of him at every pore.\" No wonder it is difficult for most people to _____ in a face-to-face group discussion.","ch":["pretend to pay attention to others","conceal what they mean and feel","interpret one's nonverbal behavior","maintain the nonverbal communication","encounter a chance to understand others"],"ans":2,"pts":2,"foot":[{"word":"mortal","gloss":"인간"},{"word":"ooze","gloss":"스며 나오다"},{"word":"pore","gloss":"모공"}],"needImg":false,"sents":[{"ck":[["Speakers don't always put","화자가 항상 담아내는 것은 아니다"],["everything that's important to them","자신에게 중요한 모든 것을"],["into words.","말 속에"]],"g":"화자가 자기에게 중요한 것을 전부 말로 내놓지는 않는다."},{"ck":[["Very often you can understand","매우 흔하게 당신은 이해할 수 있다"],["a speaker's meaning","화자의 의미를"],["by observing their nonverbal behaviors","그들의 비언어적 행동을 관찰함으로써"],["such as a change in a vocal tone or volume,","목소리 어조나 크기의 변화 같은"],["eye contact, facial expressions and gestures.","시선 교환, 표정, 몸짓 같은"]],"g":"어조·목소리 크기의 변화, 눈맞춤, 표정, 몸짓을 보면 화자의 뜻을 알 수 있는 경우가 아주 많다."},{"ck":[["As it is easy to misinterpret nonverbal behavior,","비언어적 행동은 오해하기 쉽기 때문에"],["effective listeners verbally confirm","효과적인 청자는 말로 확인한다"],["their interpretations","자신의 해석을"],["of someone's nonverbal communication.","누군가의 비언어적 소통에 대한"]],"g":"비언어 행동은 오해하기 쉬우므로, 잘 듣는 사람은 자기 해석이 맞는지 <b>말로 확인</b>한다."},{"ck":[["A question as simple as","~만큼 간단한 질문이"],["\"Do your nods indicate a yes vote?\"","'고개를 끄덕이신 게 찬성이라는 뜻인가요?'"],["can make sure","확실히 해 줄 수 있다"],["that everyone is on the same wavelength.","모두가 같은 이해를 공유하고 있음을"]],"g":"'끄덕이신 게 찬성이란 뜻인가요?' 정도의 질문만으로 서로 같은 이해에 있는지 확인된다."},{"ck":[["If, as nonverbal research indicates,","비언어 연구가 가리키듯"],["more than half of a speaker's meaning","화자가 의미하는 것의 절반 이상이"],["is conveyed nonverbally,","비언어적으로 전달된다면"],["we are missing a lot of important information","우리는 많은 중요한 정보를 놓치는 것이다"],["if we fail to \"listen\" to nonverbal behavior.","비언어적 행동을 '듣지' 못한다면"]],"g":"의미의 절반 이상이 비언어로 전달된다면, 그것을 '듣지' 못할 때 중요한 정보를 대량으로 놓치는 셈이다."},{"ck":[["Even Freud suggested that","심지어 프로이트는 시사했다"],["\"he that has eyes to see and ears to hear","'볼 눈과 들을 귀가 있는 사람은"],["may convince himself","스스로 확신하게 될 수 있다"],["that no mortal can keep a secret.","어떤 인간도 비밀을 지킬 수 없다는 것을"]],"g":"프로이트조차 '볼 눈과 들을 귀가 있는 사람은 <b>누구도 비밀을 지킬 수 없음</b>을 알게 된다'고 했다."},{"ck":[["If his lips are silent,","그의 입술이 침묵한다면"],["he chatters with his fingertips;","그는 손가락 끝으로 재잘거린다"],["betrayal oozes out of him","속마음의 누설이 그에게서 배어 나온다"],["at every pore.\"","모든 모공에서'"]],"g":"'입이 다물려 있어도 손끝이 떠들고, 속내는 모든 모공으로 스며 나온다.'"},{"ck":[["No wonder it is difficult","어려운 것은 당연하다"],["for most people","대부분의 사람들에게"],["to _____","_____하는 것이"],["in a face-to-face group discussion.","대면 집단 토론에서"]],"g":"그러니 대면 토론에서 대부분의 사람이 <b>속마음을 감추기</b>가 어려운 것도 당연하다."}],"theme":"말로 다 나오지 않는 것을 <b>비언어적 행동</b>이 대신 말해 준다는 글이다. 어조·목소리 크기·눈맞춤·표정·몸짓을 관찰하면 화자의 의도를 알 수 있다. 다만 오해하기 쉬우니 좋은 청자는 '고개 끄덕인 게 찬성이란 뜻인가요?'처럼 <b>말로 확인</b>한다. 연구에 따르면 의미의 절반 이상이 비언어로 전달되므로, 그걸 '듣지' 않으면 많은 정보를 놓친다. 프로이트도 '입이 침묵해도 손끝이 재잘거리고, 속마음이 모든 모공에서 새어 나온다'고 했다.","why":"빈칸 문장은 <i>No wonder it is difficult for most people to <u>____</u></i> — '그러니 대부분의 사람이 ~하기 <b>어려운</b> 게 당연하다'입니다. 바로 앞 프로이트 인용이 '<b>누구도 비밀을 지킬 수 없다</b>'이므로, 어려운 것은 <b>속마음을 감추는 일</b>입니다. 답은 ②.","rub":[["① 비언어적 행동","비언어 · 몸짓 · 표정 · 어조 · 목소리 · 눈맞춤 · 말 아닌"],["② 의미의 절반 이상을 전달","절반 · 반 이상 · 많이 · 대부분 · 전달 · 드러나 · 알 수 있"],["③ 속마음은 숨겨지지 않음","숨기 · 감추 · 못 숨 · 비밀 · 드러나 · 새어 · 들킨"]],"dic":{"put into words":{"p":"풋 인투 월즈","k":"말로 표현하다"},"observe":{"p":"옵절브","k":"관찰하다"},"nonverbal":{"p":"난벌벌","k":"비언어적인"},"vocal tone":{"p":"보우컬 토운","k":"목소리 어조"},"eye contact":{"p":"아이 칸택트","k":"시선 교환"},"facial expression":{"p":"페이셜 익스프뤠션","k":"얼굴 표정"},"gesture":{"p":"제스철","k":"몸짓"},"misinterpret":{"p":"미스인털프뤳","k":"오해하다, 잘못 해석하다"},"verbally":{"p":"벌벌리","k":"말로"},"confirm":{"p":"컨펌","k":"확인하다"},"interpretation":{"p":"인털프뤄테이션","k":"해석"},"nod":{"p":"낫","k":"고개 끄덕임"},"indicate":{"p":"인디케잇","k":"가리키다, 나타내다"},"on the same wavelength":{"p":"웨이블렝쓰","k":"같은 이해를 공유하는"},"convey":{"p":"컨베이","k":"전달하다"},"fail to":{"p":"페일 투","k":"~하지 못하다"},"convince oneself":{"p":"컨빈스","k":"스스로 확신하다"},"mortal":{"p":"몰틀","k":"인간, 죽을 운명의 존재 (각주)"},"chatter":{"p":"채럴","k":"재잘거리다"},"fingertip":{"p":"핑걸팁","k":"손가락 끝"},"betrayal":{"p":"비트뤠이얼","k":"누설, 속마음이 드러남"},"ooze":{"p":"우즈","k":"스며 나오다 (각주)"},"pore":{"p":"포얼","k":"모공 (각주)"},"no wonder":{"p":"노우 원덜","k":"~인 것도 당연하다"},"conceal":{"p":"컨씰","k":"감추다, 숨기다"},"face-to-face":{"p":"페이스 투 페이스","k":"대면의"},"such":{"p":"써치","k":"그러한, ~와 같은,매우 ~한"},"listen":{"p":"리슨","k":"듣다, 귀 기울이다"},"may":{"p":"메이","k":"~해도 좋다"},"keep":{"p":"킵","k":"유지하다, 지키다"},"contact":{"p":"","k":"연락, 접촉, 접촉하다"},"lips":{"p":"","k":"입술"},"same":{"p":"쎄임","k":"같은, 동일한"},"volume":{"p":"발륨","k":"부피"},"understand":{"p":"언덜스탠드","k":"이해하다"},"secret":{"p":"씨크륏","k":"비밀, 비밀의"},"pay":{"p":"페이","k":"지불하다"},"gestures":{"p":"제스철","k":"몸짓"},"group":{"p":"그룹","k":"무리, 집단, 그룹"},"eyes":{"p":"아이","k":"눈"},"easy":{"p":"이지","k":"쉬운"},"nods":{"p":"낫","k":"고개 끄덕임"},"expressions":{"p":"익스프뤠션","k":"표현, 표정"},"interpretations":{"p":"인털프뤄테이션","k":"해석"},"observing":{"p":"옵절브","k":"관찰하다"},"always":{"p":"얼웨이즈","k":"항상, 언제나"},"change":{"p":"최인지","k":"바꾸다; 변하다"},"research":{"p":"뤼썰치","k":"연구, 조사"},"encounter":{"p":"","k":"마주치다"},"vocal":{"p":"보컬","k":"보컬의, 노래의"},"speakers":{"p":"스삐껄","k":"연설자, 화자"},"mean":{"p":"민","k":"의미하다"},"behavior":{"p":"비헤이비얼","k":"행동, 태도"},"ears":{"p":"이얼","k":"귀"},"missing":{"p":"미쓰","k":"그리워하다"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"convince":{"p":"컨빈스","k":"확신시키다, 납득시키다"},"information":{"p":"임폴메이션","k":"정보"},"half":{"p":"해프","k":"절반"},"difficult":{"p":"디피컬트","k":"어려운"},"discussion":{"p":"디스커션","k":"논의, 토론"},"chance":{"p":"쵄쓰","k":"가능성"},"suggested":{"p":"써제스트","k":"제안하다"},"attention":{"p":"어텐션","k":"관심"},"behaviors":{"p":"비헤이비얼","k":"행동, 태도"},"communication":{"p":"커뮤니케이션","k":"의사소통, 소통"},"fingertips":{"p":"핑걸팁","k":"손가락 끝"},"often":{"p":"어픈","k":"종종, 자주"},"effective":{"p":"이펙팁","k":"효과적인"},"silent":{"p":"싸일런트","k":"말이 없는, 조용한"},"everyone":{"p":"에브리원","k":"모두, 모든 사람"},"nonverbally":{"p":"난벌벌","k":"비언어적인"},"oozes":{"p":"우즈","k":"스며 나오다 (각주)"},"pretend":{"p":"","k":"~인 척 하다"},"maintain":{"p":"메인테인","k":"유지하다"},"conveyed":{"p":"컨베이","k":"전달하다"},"people":{"p":"피쁠","k":"사람들"},"every":{"p":"에브뤼","k":"모든"},"wonder":{"p":"원덜","k":"놀라움, 경탄,궁금해하다"},"interpret":{"p":"인털프릿","k":"해석하다"},"eye":{"p":"아이","k":"눈"},"wavelength":{"p":"웨이블렝뜨","k":"파장"},"lot":{"p":"","k":"제비"},"feel":{"p":"필","k":"느끼다, ~한 기분이 들다"},"question":{"p":"퀘스쳔","k":"질문하다"},"tone":{"p":"토운","k":"어조"},"indicates":{"p":"인디케잇","k":"가리키다, 나타내다"},"meaning":{"p":"미닝","k":"의미, 뜻"},"see":{"p":"씨","k":"보다"},"hear":{"p":"히얼","k":"듣다, 들리다"},"chatters":{"p":"채럴","k":"재잘거리다"},"vote":{"p":"보우트","k":"투표하다, 표"},"important":{"p":"임펄턴트","k":"중요한"},"fail":{"p":"페일","k":"실패하다, 낙제하다"},"has":{"p":"해브","k":"먹다"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

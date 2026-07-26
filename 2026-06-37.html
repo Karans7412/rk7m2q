@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-37","y":2026,"m":6,"q":37,"type":"글의순서","instr":"주어진 글 다음에 이어질 글의 순서로 가장 적절한 것을 고르시오.","given":"Although there may be elements that trigger instinctive response, spectacle works primarily within a cultural frame and is subject to prevailing modes of perception that observers bring to bear.","psg":"(A) By extension, spectacle is produced by working with the grain of a particular culture, blending the innovative with the established. Thus anyone deploying spectacle may draw on a repertoire of techniques and conventions developed from previous festivals or related activities, but imitation is not enough. (B) Spectacle must also be spectacular. A spectacle has to amaze spectators, outdoing previous efforts if it is to become part of the collective memory of those who witnessed and participated in it. (C) In saying that, we stress that creation of spectacle is neither a universal nor even an inevitable expression of culture, but is a strategy commonly used by people from many different cultures to address specific needs. The task of creating spectacle has been likened to creating new works of literature, where writers normally feel bound by the rules and traditions of their genre yet need to show sufficient originality to impress their audiences.","ch":["(A) - (C) - (B)","(B) - (A) - (C)","(B) - (C) - (A)","(C) - (A) - (B)","(C) - (B) - (A)"],"ans":4,"pts":3,"foot":[{"word":"prevailing","gloss":"주요한"},{"word":"deploy","gloss":"전개하다"}],"needImg":false,"sents":[{"ck":[["Although there may be elements","요소들이 있을 수는 있지만"],["that trigger instinctive response,","본능적 반응을 유발하는"],["spectacle works primarily within a cultural frame","구경거리는 주로 문화적 틀 안에서 작동한다"],["and is subject to prevailing modes of perception","그리고 주요한 지각 방식에 영향을 받는다"],["that observers bring to bear.","관찰자들이 적용하는"]],"g":"본능을 건드리는 요소도 있겠지만, 구경거리는 주로 <b>문화적 틀</b> 안에서 작동하며 보는 이가 지닌 지각 방식에 좌우된다."},{"ck":[["(A) By extension,","(A) 더 나아가"],["spectacle is produced","구경거리는 만들어진다"],["by working with the grain of a particular culture,","특정 문화의 결에 맞추어 작업함으로써"],["blending the innovative with the established.","혁신적인 것과 기존의 것을 섞으면서"]],"g":"(A) 더 나아가 구경거리는 그 문화의 결을 따라, <b>새것과 익숙한 것을 섞어</b> 만들어진다."},{"ck":[["Thus anyone deploying spectacle","따라서 구경거리를 전개하는 누구든"],["may draw on a repertoire of techniques and conventions","기법과 관습의 레퍼토리를 끌어 쓸 수 있다"],["developed from previous festivals or related activities,","이전의 축제나 관련 활동에서 발전된"],["but imitation is not enough.","하지만 모방만으로는 충분하지 않다"]],"g":"이전 축제에서 쌓인 기법과 관습을 가져다 쓸 수는 있지만, <b>흉내만으로는 부족하다.</b>"},{"ck":[["(B) Spectacle must also be spectacular.","(B) 구경거리는 또한 장관이어야 한다"]],"g":"(B) 구경거리는 <b>구경거리다워야</b>, 즉 장관이어야 한다."},{"ck":[["A spectacle has to amaze spectators,","구경거리는 관객을 놀라게 해야 한다"],["outdoing previous efforts","이전의 시도들을 능가하면서"],["if it is to become part of the collective memory","집단 기억의 일부가 되려면"],["of those who witnessed and participated in it.","그것을 목격하고 참여한 사람들의"]],"g":"보고 참여한 이들의 <b>집단 기억</b>에 남으려면, 이전을 능가할 만큼 관객을 놀라게 해야 한다."},{"ck":[["(C) In saying that,","(C) 그렇게 말하면서"],["we stress that creation of spectacle","우리는 구경거리의 창조가"],["is neither a universal nor even an inevitable expression of culture,","문화의 보편적 표현도 필연적 표현도 아니라고 강조한다"],["but is a strategy commonly used","오히려 흔히 사용되는 전략이라고"],["by people from many different cultures","여러 다양한 문화권의 사람들에 의해"],["to address specific needs.","특정한 필요를 해결하기 위해"]],"g":"(C) 그렇게 말하면서 우리는, 구경거리 만들기가 문화의 보편적·필연적 표현이 아니라 특정 필요를 채우려 쓰는 <b>전략</b>임을 강조한다."},{"ck":[["The task of creating spectacle","구경거리를 만드는 과업은"],["has been likened to creating new works of literature,","새로운 문학 작품을 창작하는 것에 비유되어 왔다"],["where writers normally feel bound","거기서 작가들은 보통 얽매인다고 느끼면서도"],["by the rules and traditions of their genre","자기 장르의 규칙과 전통에"],["yet need to show sufficient originality","충분한 독창성을 보여야 한다"],["to impress their audiences.","독자에게 깊은 인상을 주려면"]],"g":"그 일은 문학 창작에 비유돼 왔다 — 작가는 장르의 규칙에 매인 채로도 <b>충분한 독창성</b>을 보여야 한다."}],"theme":"<b>구경거리(spectacle)</b>가 어떻게 만들어지는가를 다룬다. 주어진 글은 구경거리가 본능이 아니라 <b>문화적 틀</b> 안에서 작동한다고 못 박는다. (C)는 '그렇게 말하면서'로 그 말을 받아, 구경거리 창조가 보편적·필연적 표현이 아니라 여러 문화권이 특정 필요를 채우려 쓰는 <b>전략</b>임을 강조하고, 장르의 규칙에 얽매이면서도 독창성을 보여야 하는 <b>문학 창작</b>에 비유한다. (A)는 그 비유를 이어받아 '기존과 혁신을 섞되 <b>모방만으로는 부족하다</b>'고 하고, (B)는 그 부족한 부분을 채운다 — 구경거리는 이전을 능가할 만큼 <b>놀라워야</b> 집단 기억에 남는다.","why":"(C)의 첫머리 <i>In saying that</i>이 결정적입니다. 주어진 글의 주장을 그대로 받는 표현이므로 (C)가 먼저 옵니다. 이어 (C) 끝의 <b>문학 비유</b>(규칙에 얽매이되 독창성 필요)를 <i>By extension</i>으로 확장하는 (A), 마지막으로 <i>must also be spectacular</i>로 조건을 하나 더 얹는 (B). 따라서 <b>(C)-(A)-(B)</b> = ④.","rub":[["① 구경거리는 문화적","구경거리 · 볼거리 · 스펙터클 · 문화 · 틀 · 지각 · 관객"],["② 기존을 따르되 독창성 필요","기존 · 관습 · 전통 · 규칙 · 모방 · 부족 · 독창 · 혁신 · 섞"],["③ 놀라워야 기억에 남음","놀라 · 장관 · 능가 · 압도 · 기억 · 남 · 인상"]],"dic":{"element":{"p":"엘러먼트","k":"요소"},"trigger":{"p":"트뤼걸","k":"유발하다"},"instinctive":{"p":"인스팅티브","k":"본능적인"},"spectacle":{"p":"스펙터클","k":"구경거리, 볼거리"},"primarily":{"p":"프롸이메뤌리","k":"주로"},"be subject to":{"p":"썹젝트 투","k":"~에 영향을 받다, ~에 좌우되다"},"prevailing":{"p":"프뤼베일링","k":"주요한, 지배적인 (각주)"},"perception":{"p":"펄쎕션","k":"지각"},"bring to bear":{"p":"브륑 투 베얼","k":"적용하다, 작용시키다"},"by extension":{"p":"바이 익스텐션","k":"더 나아가, 확장하면"},"grain":{"p":"그뤠인","k":"결, 나뭇결"},"blend a with b":{"p":"블렌드","k":"A를 B와 섞다"},"innovative":{"p":"이너베이티브","k":"혁신적인"},"established":{"p":"이스태블리쉬트","k":"기존의, 확립된"},"deploy":{"p":"디플로이","k":"전개하다 (각주)"},"draw on":{"p":"드로우 온","k":"~을 끌어 쓰다, 활용하다"},"repertoire":{"p":"뤠펄트왈","k":"레퍼토리, 목록"},"convention":{"p":"컨벤션","k":"관습"},"imitation":{"p":"이미테이션","k":"모방"},"spectacular":{"p":"스펙태큘럴","k":"장관인, 눈부신"},"amaze":{"p":"어메이즈","k":"놀라게 하다"},"spectator":{"p":"스펙테이럴","k":"관객"},"outdo":{"p":"아웃두","k":"능가하다"},"collective memory":{"p":"컬렉티브 메머뤼","k":"집단 기억"},"witness":{"p":"윗니스","k":"목격하다"},"stress":{"p":"스트뤠스","k":"강조하다"},"universal":{"p":"유니벌쓸","k":"보편적인"},"inevitable":{"p":"인에비러블","k":"필연적인"},"strategy":{"p":"스트뢔러지","k":"전략"},"address":{"p":"어드뤠스","k":"(문제를) 해결하다, 다루다"},"liken a to b":{"p":"라이컨","k":"A를 B에 비유하다"},"literature":{"p":"리러뤄철","k":"문학"},"be bound by":{"p":"바운드","k":"~에 얽매이다"},"genre":{"p":"쟝르","k":"장르"},"sufficient":{"p":"써피션트","k":"충분한"},"originality":{"p":"오뤼지낼러티","k":"독창성"},"bear":{"p":"","k":"참다, 견디다"},"may":{"p":"메이","k":"~해도 좋다"},"specific":{"p":"","k":"특정한"},"previous":{"p":"프뤼비어스","k":"이전의"},"related":{"p":"","k":"관계를 맺다"},"activities":{"p":"액티비피","k":"활동, 움직임"},"particular":{"p":"","k":"특정한, 특별한"},"saying":{"p":"","k":"말하기, 속담"},"techniques":{"p":"테크닉","k":"기법"},"anyone":{"p":"에니원","k":"누군가, 누구나, 아무도"},"works":{"p":"월크","k":"효과가 있다"},"elements":{"p":"엘러먼트","k":"요소"},"culture":{"p":"컬춸","k":"문화, 교양"},"different":{"p":"디퍼런트","k":"다른"},"draw":{"p":"드뤄우","k":"이끌다, 당기다"},"cultures":{"p":"컬춸","k":"문화, 교양"},"from":{"p":"프럼","k":"~에서, ~부터"},"bring":{"p":"브링","k":"가져오다, 데려오다"},"part":{"p":"팔트","k":"~와 헤어지다"},"expression":{"p":"익스프뤠션","k":"표현, 표정"},"show":{"p":"쑈우","k":"보여 주다, 드러내다; 쇼, 공연"},"blending":{"p":"블렌드","k":"섞다, 혼합하다"},"needs":{"p":"니드","k":"(보통 복수로) 필요한 것"},"although":{"p":"","k":"비록 ~일지라도"},"response":{"p":"뤼스판스","k":"대답, 반응"},"witnessed":{"p":"윗니스","k":"목격하다"},"subject":{"p":"썹죅트","k":"피실험자"},"become":{"p":"비컴","k":"~이 되다"},"many":{"p":"메니","k":"(수가) 많은"},"collective":{"p":"컬렉티브","k":"집단적인"},"creation":{"p":"크뤼에이션","k":"창조, 창작물"},"memory":{"p":"메머리","k":"기억(력), 추억"},"outdoing":{"p":"아웃두","k":"능가하다"},"produced":{"p":"프러듀스","k":"생산하다, 만들어내다"},"thus":{"p":"더스","k":"따라서, 그리하여"},"festivals":{"p":"페스티벌","k":"축제, 명절"},"commonly":{"p":"","k":"흔히"},"writers":{"p":"롸이럴","k":"작가"},"enough":{"p":"인어프","k":"충분한; 충분히"},"likened":{"p":"","k":"비유하다"},"bound":{"p":"","k":"얽매인"},"cultural":{"p":"컬춰럴","k":"문화의, 문화적인"},"working":{"p":"월크","k":"효과가 있다"},"developed":{"p":"디벨럽","k":"발달시키다, 개발하다"},"people":{"p":"피쁠","k":"사람들"},"impress":{"p":"","k":"깊은 인상을 주다"},"conventions":{"p":"컨벤션","k":"관습"},"need":{"p":"니드","k":"(보통 복수로) 필요한 것"},"task":{"p":"태스크","k":"과제, 임무"},"must":{"p":"머스트","k":"~해야 한다,~임이 틀림없다"},"observers":{"p":"","k":"관찰자"},"normally":{"p":"놀멀","k":"평범한, 정상적인"},"rules":{"p":"룰","k":"규칙, 지배하다"},"efforts":{"p":"에펄트","k":"시도"},"creating":{"p":"크뤼에잇","k":"창조하다, 만들어내다"},"feel":{"p":"필","k":"느끼다, ~한 기분이 들다"},"yet":{"p":"옛","k":"아직"},"deploying":{"p":"디플로이","k":"전개하다 (각주)"},"frame":{"p":"","k":"뼈대, 틀, 액자"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"participated":{"p":"파티써페잇","k":"참가하다"},"traditions":{"p":"트뤄디션","k":"전통, 관습"},"audiences":{"p":"어디언스","k":"청중, 시청자"},"spectators":{"p":"스펙테이럴","k":"관객"},"has":{"p":"해브","k":"먹다"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

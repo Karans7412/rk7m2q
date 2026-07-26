@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-41","y":2026,"m":6,"q":41,"type":"장문-제목","instr":"다음 글을 읽고, 물음에 답하시오. 윗글의 제목으로 가장 적절한 것은?","given":"","psg":"The structure of glass is, frankly, a bit of a mess. Clear and perfect as it might appear to our eyes, down at the molecular level, glass looks more like a random ball-pit of atoms. The technical term for this mess depends on who you're asking: for some scientists it is an \"amorphous solid,\" for others a \"supercooled liquid.\" In theory it's both liquid and solid, though, given the way it behaves, in practice it's really the latter. In fact, at room temperature glass never behaves as a (a) liquid, even an imperceptibly viscous one, even over long periods of time (though it can \"sweat\" if you don't add enough lime to the mix). Those (b) misshapen sheets of glass you sometimes see in old stained-glass windows, thicker at the bottom than the top, are generally not that way because the glass is slowly sinking over time. Unless the church has endured temperatures of more than 400˚C, the chances are they are uneven because that's the way they were blown and (c) solidified in the first place. Flat glass was only developed in the nineteenth century and we had to wait until the middle of the twentieth century for truly flat, thin sheets of glass. The (d) paradox is that, despite it being one of the very oldest human-made substances, scientists still struggle to comprehend why glass behaves the way it does. Glass seems to (e) obey most molecular laws. As one glassmaker put it, glass is not a material; it's a state.","ch":["Unsolved Mystery Behind the Nature of Glass","Solid and Liquid Glass: Their Respective Uses","A Scientific Perspective on Problems with Stained Glass","Puzzling Glass: Why Solid but Easily Breakable?","Techniques for Producing Truly Flat Glass"],"ans":1,"pts":2,"foot":[{"word":"molecular","gloss":"분자의"},{"word":"amorphous","gloss":"무정형(無定形)의"},{"word":"viscous","gloss":"들러붙는"}],"needImg":false,"sents":[{"ck":[["The structure of glass is, frankly,","유리의 구조는 솔직히 말해"],["a bit of a mess.","다소 엉망진창이다"]],"g":"유리의 구조는 솔직히 좀 엉망이다."},{"ck":[["Clear and perfect as it might appear to our eyes,","우리 눈에는 맑고 완벽해 보일지 몰라도"],["down at the molecular level,","분자 수준으로 내려가면"],["glass looks more like a random ball-pit of atoms.","유리는 원자들의 마구잡이 볼풀에 더 가까워 보인다"]],"g":"눈에는 맑고 완벽해 보여도, 분자 수준에서 유리는 원자들이 뒤엉킨 볼풀에 가깝다."},{"ck":[["The technical term for this mess","이 엉망진창을 가리키는 전문 용어는"],["depends on who you're asking:","누구에게 묻느냐에 달렸다"],["for some scientists it is an \"amorphous solid,\"","어떤 과학자에게는 '무정형 고체'이고"],["for others a \"supercooled liquid.\"","다른 이들에게는 '과냉각 액체'이다"]],"g":"부르는 이름부터 갈린다 — 누구는 '무정형 고체', 누구는 '과냉각 액체'라 한다."},{"ck":[["In theory it's both liquid and solid,","이론상 그것은 액체이면서 고체이다"],["though, given the way it behaves,","하지만 그것이 행동하는 방식을 보면"],["in practice it's really the latter.","실제로는 정말로 후자이다"]],"g":"이론상으론 액체이자 고체지만, 실제로 구는 걸 보면 <b>고체</b> 쪽이다."},{"ck":[["In fact, at room temperature","사실 상온에서"],["glass never behaves as a (a) liquid,","유리는 결코 액체처럼 행동하지 않는다"],["even an imperceptibly viscous one,","알아차릴 수 없을 만큼 들러붙는 액체라 해도"],["even over long periods of time","아주 오랜 시간이 지나도"],["(though it can \"sweat\"","(다만 '땀을 흘릴' 수는 있다"],["if you don't add enough lime to the mix).","혼합물에 석회를 충분히 넣지 않으면)"]],"g":"상온의 유리는 아무리 오래 둬도 액체처럼 굴지 않는다 — 석회가 모자라면 '땀'을 흘릴 수는 있지만."},{"ck":[["Those (b) misshapen sheets of glass","가끔 보이는 그 보기 흉한 유리판들은"],["you sometimes see in old stained-glass windows,","오래된 스테인드글라스 창에서"],["thicker at the bottom than the top,","위쪽보다 아래쪽이 더 두꺼운"],["are generally not that way","대개 그렇게 된 것이 아니다"],["because the glass is slowly sinking over time.","유리가 시간이 지나며 천천히 가라앉기 때문에"]],"g":"오래된 스테인드글라스에서 아래가 두꺼운 유리판은, 유리가 흘러내려서 그런 것이 <b>아니다.</b>"},{"ck":[["Unless the church has endured temperatures","교회가 온도를 견뎌 낸 것이 아니라면"],["of more than 400˚C,","400도가 넘는"],["the chances are they are uneven","아마 그것들이 고르지 않은 것은"],["because that's the way they were blown","그런 방식으로 불어서 만들어지고"],["and (c) solidified in the first place.","애초에 그렇게 굳었기 때문이다"]],"g":"교회가 400도를 견딘 게 아니라면, 그 유리가 고르지 않은 건 <b>처음부터 그렇게 불려 굳었기</b> 때문이다."},{"ck":[["Flat glass was only developed in the nineteenth century","평판 유리는 19세기에야 겨우 개발되었다"],["and we had to wait until the middle of the twentieth century","그리고 우리는 20세기 중반까지 기다려야 했다"],["for truly flat, thin sheets of glass.","정말로 평평하고 얇은 유리판을 얻기까지"]],"g":"평판 유리는 19세기에야 나왔고, 진짜 평평하고 얇은 판은 20세기 중반에야 가능했다."},{"ck":[["The (d) paradox is that,","역설은 ~라는 것이다"],["despite it being one of the very oldest human-made substances,","그것이 인간이 만든 가장 오래된 물질 중 하나인데도"],["scientists still struggle to comprehend","과학자들이 여전히 이해하려 애쓰고 있다는"],["why glass behaves the way it does.","왜 유리가 그렇게 행동하는지를"]],"g":"<b>역설</b>은, 인간이 만든 가장 오래된 물질 중 하나인데도 왜 그렇게 구는지 아직 모른다는 것이다."},{"ck":[["Glass seems to (e) obey","유리는 따르는 것처럼 보인다"],["most molecular laws.","대부분의 분자 법칙을"]],"g":"유리는 대부분의 분자 법칙을 <b>따르는(→ 거부하는)</b> 것처럼 보인다."},{"ck":[["As one glassmaker put it,","한 유리 제조업자가 말했듯이"],["glass is not a material; it's a state.","유리는 재료가 아니라 상태이다"]],"g":"한 유리 장인의 말처럼, 유리는 <b>재료가 아니라 상태</b>다."}],"theme":"유리는 <b>정체가 안 잡히는 물질</b>이다. 눈에는 맑고 완벽해 보여도 분자 수준에서는 원자들이 마구 뒤엉킨 볼풀에 가깝다. 어떤 과학자는 '무정형 고체', 다른 이는 '과냉각 액체'라 부른다. 이론상 액체이자 고체지만 실제 거동은 <b>고체</b>다. 상온에서 유리는 결코 액체처럼 굴지 않는다. 오래된 스테인드글라스가 아래쪽이 두꺼운 건 유리가 흘러내려서가 아니라 <b>처음부터 그렇게 불려 굳었기</b> 때문이다. 평판 유리는 19세기에야 나왔다. 역설은, 인간이 만든 가장 오래된 물질 중 하나인데도 과학자들이 아직 그 거동을 이해하지 못한다는 것이다.","why":"글 전체가 '유리가 무엇인지 아직 모른다'로 수렴합니다. <i>The paradox is that ... scientists still struggle to comprehend</i>가 결론이므로 <b>①Unsolved Mystery Behind the Nature of Glass</b>가 제목입니다. ③은 스테인드글라스라는 <b>예시</b>일 뿐이고, ⑤ 평판 유리 제조법도 곁가지입니다.","rub":[["① 유리의 정체가 모호","유리 · 고체 · 액체 · 무정형 · 과냉각 · 모호 · 애매 · 둘 다"],["② 통념은 틀림","가라앉 · 흘러내 · 아니 · 오해 · 통념 · 처음부터 · 만들 때"],["③ 아직 이해 못 함","모른 · 이해 못 · 미해결 · 수수께끼 · 역설 · 오래된 · 여전히"]],"dic":{"structure":{"p":"스트뤅철","k":"구조"},"frankly":{"p":"프뢩클리","k":"솔직히"},"a bit of a mess":{"p":"어 빗 오브 어 메스","k":"다소 엉망인 것"},"molecular":{"p":"멀레큘럴","k":"분자의 (각주)"},"random":{"p":"뢘덤","k":"마구잡이의, 무작위의"},"ball-pit":{"p":"볼 핏","k":"볼풀(공 놀이터)"},"atom":{"p":"애럼","k":"원자"},"technical term":{"p":"테크니컬 텀","k":"전문 용어"},"amorphous":{"p":"어몰퍼스","k":"무정형의 (각주)"},"solid":{"p":"쌀리드","k":"고체"},"supercooled":{"p":"쑤펄쿨드","k":"과냉각된"},"liquid":{"p":"리퀴드","k":"액체"},"in theory":{"p":"인 씨어뤼","k":"이론상"},"given":{"p":"기븐","k":"~을 고려하면"},"behave":{"p":"비헤이브","k":"행동하다, 거동하다"},"in practice":{"p":"인 프뢕티스","k":"실제로는"},"the latter":{"p":"더 래럴","k":"후자"},"room temperature":{"p":"룸 템퍼뤄철","k":"상온"},"imperceptibly":{"p":"임펄쎕터블리","k":"알아차릴 수 없을 만큼"},"viscous":{"p":"비스커스","k":"들러붙는, 점성이 있는 (각주)"},"lime":{"p":"라임","k":"석회"},"misshapen":{"p":"미스셰이픈","k":"보기 흉한, 모양이 일그러진"},"stained-glass":{"p":"스테인드 글래스","k":"스테인드글라스의"},"sink":{"p":"씽크","k":"가라앉다"},"endure":{"p":"인듀얼","k":"견디다"},"the chances are":{"p":"더 챈씨즈 알","k":"아마 ~일 것이다"},"uneven":{"p":"언이븐","k":"고르지 않은"},"blow":{"p":"블로우","k":"(유리를) 불어서 만들다"},"solidify":{"p":"썰리디파이","k":"응고시키다, 굳히다"},"in the first place":{"p":"인 더 펄스트 플레이스","k":"애초에"},"flat glass":{"p":"플랫 글래스","k":"평판 유리"},"paradox":{"p":"패뤄닥스","k":"역설"},"substance":{"p":"썹스턴스","k":"물질"},"struggle to":{"p":"스트뤄글 투","k":"~하려 애쓰다"},"comprehend":{"p":"캄프뤼헨드","k":"이해하다"},"obey":{"p":"오우베이","k":"따르다, 순종하다"},"put it":{"p":"풋 잇","k":"(말로) 표현하다"},"state":{"p":"스테잇","k":"상태"},"add":{"p":"애드","k":"추가하다; 더하다"},"theory":{"p":"띠어리","k":"이론"},"sheets":{"p":"","k":"(종이) 한 장, (침대) 시트"},"flat":{"p":"플랫","k":"평평한, 바람이 빠진"},"never":{"p":"네벌","k":"절대[결코] ~ 않다"},"temperatures":{"p":"템퍼뤄쳘","k":"온도, 기온"},"glass":{"p":"글래스","k":"유리"},"chances":{"p":"쵄쓰","k":"가능성"},"sinking":{"p":"씽크","k":"가라앉다"},"thin":{"p":"띤","k":"얇은"},"still":{"p":"스띨","k":"조용한, 가만히 있는"},"thicker":{"p":"띡","k":"두꺼운"},"sweat":{"p":"스웻","k":"땀, 땀을 흘리다"},"generally":{"p":"","k":"일반적인"},"term":{"p":"","k":"임기"},"eyes":{"p":"아이","k":"눈"},"easily":{"p":"","k":"쉽게"},"perspective":{"p":"펄스뻭티브","k":"관점"},"periods":{"p":"피뤼어드","k":"기간, 시기"},"mystery":{"p":"미스터뤼","k":"수수께끼, 미스터리"},"church":{"p":"철치","k":"교회"},"mess":{"p":"메쓰","k":"엉망진창"},"clear":{"p":"클리얼","k":"(날씨가) 맑은"},"old":{"p":"올드","k":"늙은, 나이 많은; 오래된"},"endured":{"p":"인듀얼","k":"견디다"},"mix":{"p":"믹스","k":"섞다, 혼합하다"},"laws":{"p":"러","k":"법, 법률"},"perfect":{"p":"펄펙트","k":"완벽한"},"solidified":{"p":"썰리디파이","k":"응고시키다, 굳히다"},"top":{"p":"탑","k":"맨 위, 정상; 맨 위의, 정상의"},"both":{"p":"보우뜨","k":"양자의, 둘 다 (의)"},"bottom":{"p":"바틈","k":"밑, 바닥"},"struggle":{"p":"스뜨뤄글","k":"애쓰다, 분투하"},"puzzling":{"p":"퍼즐","k":"퍼즐,어리둥절하게 하다"},"until":{"p":"언틸","k":"~까지; ~할 때까지"},"enough":{"p":"인어프","k":"충분한; 충분히"},"techniques":{"p":"테크닉","k":"기법"},"only":{"p":"온리","k":"유일한; 단지, 오직"},"substances":{"p":"썹스턴스","k":"물질"},"century":{"p":"쎈춰뤼","k":"세기, 100년"},"depends":{"p":"디펜드","k":"의존하다"},"bit":{"p":"빗","k":"조금,작은양"},"long":{"p":"롱","k":"긴"},"respective":{"p":"","k":"각각의"},"being":{"p":"","k":"존재"},"scientific":{"p":"싸이언티픽","k":"과학적인"},"truly":{"p":"트룰리","k":"정말로"},"problems":{"p":"프라블럼","k":"문제, 어려움"},"slowly":{"p":"슬로울리","k":"천천히, 느리게"},"room":{"p":"","k":"여지"},"scientists":{"p":"싸이언티슷트","k":"과학자"},"latter":{"p":"래떨","k":"후자의; 후자"},"over":{"p":"오벌","k":"~ 위에[위로]"},"developed":{"p":"디벨럽","k":"발달시키다, 개발하다"},"oldest":{"p":"올드","k":"늙은, 나이 많은; 오래된"},"despite":{"p":"디스빠잇","k":"(~에도) 불구하고"},"seems":{"p":"씸","k":"~처럼 보이다"},"uses":{"p":"유즈","k":"사용하다"},"some":{"p":"썸","k":"몇몇의, 약간의"},"place":{"p":"플레이쓰","k":"두다, 놓다"},"temperature":{"p":"템퍼뤄쳘","k":"온도, 기온"},"time":{"p":"타임","k":"시대, 횟수"},"nature":{"p":"네이춸","k":"본성, 성질"},"material":{"p":"머티뤼얼","k":"제재"},"practice":{"p":"프랙티쓰","k":"관습"},"behind":{"p":"비하인드","k":"뒤에, 뒤로, 뒤에"},"appear":{"p":"어피얼","k":"나타나다, ~인 것 같다"},"atoms":{"p":"애럼","k":"원자"},"even":{"p":"이븐","k":"~조차(도), 훨씬,짝수의"},"had":{"p":"해브","k":"먹다"},"looks":{"p":"룩라익","k":"~해 보이다, 보다"},"see":{"p":"씨","k":"보다"},"asking":{"p":"애슥크","k":"묻다, 부탁하다"},"sometimes":{"p":"썸타임즈","k":"때때로, 가끔"},"first":{"p":"펄스트","k":"첫 번째의"},"behaves":{"p":"비헤이브","k":"행동하다, 거동하다"},"producing":{"p":"프러듀스","k":"생산하다, 만들어내다"},"middle":{"p":"미들","k":"중심, 중앙"},"has":{"p":"해브","k":"먹다"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

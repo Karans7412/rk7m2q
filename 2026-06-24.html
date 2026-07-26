@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-24","y":2026,"m":6,"q":24,"type":"제목","instr":"다음 글의 제목으로 가장 적절한 것은?","given":"","psg":"Before the 1950s, tourism was very much an industry which was fragmented; hotels, transport operators, travel agents, and tour operators all tended to work independently of each other. Hotels were largely in the business of selling bed nights. Airlines and railways were in the business of selling seats. Travel agents, of course, were selling travel and holidays, but in each case they tended to operate very much as individual businesses. From the mid-1950s onwards, particularly in the UK, the growth of tour operators began to change the nature of the industry from essentially individual business activities to more integrated activities. Hotels, for example, were beginning to see customers as wanting a range of services rather than simply buying accommodation. So hotels began to develop shopping arcades and later to offer secretarial centres to try to increase the spend of guests within the hotel complex. Transport operators, particularly in the airline business, saw the sale of transport services as being integral to a much wider need. Airlines offered insurance and accommodation booking for travellers.","ch":["The Bright and Dark Sides of Collapsing Tour Resources","Separate to Combined: Changes in the Tourism Business","Reduced Roles of Tour Operators in the Tourism Industry","Integration's Failure: Not Meeting Customers' Various Needs","New Challenges Facing Service Providers in Modern Tourism"],"ans":2,"pts":2,"foot":[{"word":"fragment","gloss":"파편이 되게 하다"}],"needImg":false,"sents":[{"ck":[["Before the 1950s,","1950년대 이전에"],["tourism was very much an industry","관광업은 대단히 ~한 산업이었다"],["which was fragmented;","파편화된"],["hotels, transport operators, travel agents, and tour operators","호텔, 운송업체, 여행사, 여행 상품 운영업체는"],["all tended to work independently of each other.","모두 서로 독립적으로 일하는 경향이 있었다"]],"g":"1950년대 이전 관광업은 조각조각 나뉜 산업이었고, 호텔·운송·여행사·여행상품업체가 따로 놀았다."},{"ck":[["Hotels were largely in the business","호텔은 대체로 사업을 하고 있었다"],["of selling bed nights.","숙박을 파는"]],"g":"호텔은 그저 '하룻밤 잠자리'를 파는 곳이었다."},{"ck":[["Airlines and railways","항공사와 철도 회사는"],["were in the business of selling seats.","좌석을 파는 사업을 하고 있었다"]],"g":"항공사와 철도는 '좌석'을 파는 곳이었다."},{"ck":[["Travel agents, of course,","물론 여행사는"],["were selling travel and holidays,","여행과 휴가 상품을 팔고 있었다"],["but in each case","하지만 각각의 경우에"],["they tended to operate","그들은 운영되는 경향이 있었다"],["very much as individual businesses.","대단히 별개의 사업체로"]],"g":"여행사는 여행과 휴가를 팔았지만, 어느 쪽이든 서로 남남인 개별 사업체였다."},{"ck":[["From the mid-1950s onwards,","1950년대 중반부터 계속"],["particularly in the UK,","특히 영국에서"],["the growth of tour operators","여행 상품 운영업체의 성장이"],["began to change the nature of the industry","산업의 성격을 바꾸기 시작했다"],["from essentially individual business activities","본질적으로 개별적인 사업 활동에서"],["to more integrated activities.","더 통합적인 활동으로"]],"g":"1950년대 중반부터, 특히 영국에서 여행상품업체가 커지며 산업이 <b>개별에서 통합으로</b> 바뀌기 시작했다."},{"ck":[["Hotels, for example,","예를 들어 호텔은"],["were beginning to see customers","고객을 보기 시작했다"],["as wanting a range of services","다양한 서비스를 원하는 사람으로"],["rather than simply buying accommodation.","단순히 숙박만 사는 사람이라기보다"]],"g":"호텔은 손님을 '잠만 자는 사람'이 아니라 '여러 서비스를 원하는 사람'으로 보기 시작했다."},{"ck":[["So hotels began to develop shopping arcades","그래서 호텔은 쇼핑 아케이드를 만들기 시작했고"],["and later to offer secretarial centres","나중에는 사무 지원 센터를 제공하기 시작했다"],["to try to increase the spend of guests","투숙객의 지출을 늘리려는 시도로"],["within the hotel complex.","호텔 단지 안에서"]],"g":"그래서 호텔 안에 쇼핑 아케이드를, 나중에는 사무 지원 센터까지 들여 손님 지출을 끌어올리려 했다."},{"ck":[["Transport operators,","운송업체는"],["particularly in the airline business,","특히 항공업계에서"],["saw the sale of transport services","운송 서비스의 판매를 보았다"],["as being integral to a much wider need.","훨씬 더 폭넓은 필요와 불가분한 것으로"]],"g":"항공사들은 운송 판매를 훨씬 넓은 필요와 떼어 놓을 수 없는 것으로 봤다."},{"ck":[["Airlines offered insurance and accommodation booking","항공사는 보험과 숙박 예약을 제공했다"],["for travellers.","여행자들에게"]],"g":"그래서 항공사가 여행자에게 보험과 숙박 예약까지 제공했다."}],"theme":"관광업이 <b>따로따로에서 하나로</b> 바뀐 역사다. 1950년대 이전에는 호텔은 숙박, 항공·철도는 좌석, 여행사는 여행 상품을 각자 팔았다. 1950년대 중반부터, 특히 영국에서 여행 상품 운영업체가 커지면서 산업의 성격이 <b>개별 활동에서 통합 활동으로</b> 바뀌기 시작했다. 호텔은 손님을 '숙박만 사는 사람'이 아니라 '여러 서비스를 원하는 사람'으로 보고 쇼핑 아케이드와 사무 지원 센터를 들였고, 항공사는 보험과 숙박 예약까지 함께 팔았다.","why":"제목은 <b>글의 변화 축</b>을 그대로 담아야 합니다. 이 글은 '분리 → 통합'이라는 한 방향의 변화만 말하므로 ②가 정확합니다. ④는 '통합의 실패'라 방향이 반대이고, ③은 여행업체의 역할이 <b>커졌다</b>는 본문과 어긋납니다.","rub":[["① 예전엔 따로따로","따로 · 개별 · 분리 · 독립 · 각자 · 파편 · 나뉘"],["② 1950년대 중반 이후 변화","1950 · 중반 · 이후 · 여행 상품 · 업체 성장 · 바뀌"],["③ 통합된 서비스","통합 · 합쳐 · 묶 · 함께 · 여러 서비스 · 한꺼번에 · 폭넓"]],"dic":{"tourism":{"p":"투어뤼즘","k":"관광업"},"fragmented":{"p":"프뢕멘티드","k":"파편화된, 조각난"},"transport operator":{"p":"트뢘스폴트 아퍼뤠이럴","k":"운송업체"},"travel agent":{"p":"트뢔블 에이전트","k":"여행사"},"tour operator":{"p":"투얼 아퍼뤠이럴","k":"여행 상품 운영업체"},"tend to":{"p":"텐드 투","k":"~하는 경향이 있다"},"independently":{"p":"인디펜던틀리","k":"독립적으로"},"largely":{"p":"랄즐리","k":"대체로"},"bed night":{"p":"베드 나잇","k":"숙박(1인 1박)"},"railway":{"p":"뤠일웨이","k":"철도 회사"},"operate":{"p":"아퍼뤠잇","k":"운영되다, 영업하다"},"individual":{"p":"인디비주얼","k":"개별의, 각각의"},"onwards":{"p":"안월즈","k":"(그때부터) 계속"},"particularly":{"p":"펄티큘럴리","k":"특히"},"nature":{"p":"네이철","k":"성격, 본질"},"essentially":{"p":"이쎈셜리","k":"본질적으로"},"integrated":{"p":"인터그뤠이릿","k":"통합된"},"a range of":{"p":"어 뤠인지 오브","k":"다양한"},"accommodation":{"p":"어카머데이션","k":"숙박(시설)"},"arcade":{"p":"알케이드","k":"아케이드, 상가"},"secretarial":{"p":"쎄크뤄테뤼얼","k":"사무의, 비서의"},"spend":{"p":"스펜드","k":"지출액"},"complex":{"p":"캄플렉스","k":"단지, 복합 시설"},"integral to":{"p":"인터그뤌","k":"~과 불가분한"},"insurance":{"p":"인슈어뤈스","k":"보험"},"booking":{"p":"부킹","k":"예약"},"travel":{"p":"트레벌","k":"여행하다; 여행"},"business":{"p":"비즈니스","k":"사업"},"resources":{"p":"뤼솔스","k":"자원"},"holidays":{"p":"할러데이","k":"휴일"},"sides":{"p":"사이드","k":"~을 옆으로 밀어내다"},"meeting":{"p":"미팅","k":"회의"},"activities":{"p":"액티비피","k":"활동, 움직임"},"offered":{"p":"","k":"제안하다"},"separate":{"p":"","k":"분리하다"},"range":{"p":"뤠인지","k":"범위, 폭; 이르다"},"develop":{"p":"디벨럽","k":"발달시키다, 개발하다"},"customers":{"p":"커스떠멀","k":"고객, 손님"},"agents":{"p":"","k":"행위자, 동인"},"transport":{"p":"","k":"이동시키다, 수송하다"},"customers'":{"p":"커스떠멀","k":"고객, 손님"},"from":{"p":"프럼","k":"~에서, ~부터"},"needs":{"p":"니드","k":"(보통 복수로) 필요한 것"},"bright":{"p":"브롸잇트","k":"밝은, 빛나는"},"all":{"p":"얼","k":"모든"},"change":{"p":"최인지","k":"바꾸다; 변하다"},"sale":{"p":"쎄일","k":"판매, 세일"},"challenges":{"p":"챌린지","k":"이의를 제기하다"},"began":{"p":"비긴","k":"시작하다"},"combined":{"p":"","k":"결합하다"},"wanting":{"p":"원트","k":"원하다, ~하고 싶다"},"buying":{"p":"바이","k":"사다, 구입하다"},"arcades":{"p":"알케이드","k":"아케이드, 상가"},"seats":{"p":"씨잇","k":"자리, 좌석"},"industry":{"p":"인더스트뤼","k":"산업, 공업"},"selling":{"p":"셀","k":"팔다, 팔리다"},"collapsing":{"p":"컬랩스","k":"붕괴하다"},"course":{"p":"","k":"강의"},"later":{"p":"레이럴","k":"후에, 나중에"},"modern":{"p":"마던","k":"현대의, 근대의"},"reduced":{"p":"뤼듀스","k":"줄이다, 감소시키다"},"guests":{"p":"게슷트","k":"손님"},"operators":{"p":"","k":"여행 상품 운영업체"},"increase":{"p":"인크뤼스","k":"증가하다, 증가"},"try":{"p":"트라이","k":"노력하다, 애를 쓰다; 시도하다"},"being":{"p":"","k":"존재"},"before":{"p":"비펄","k":"~ 전에"},"offer":{"p":"","k":"제안하다"},"airlines":{"p":"","k":"항공사"},"saw":{"p":"","k":"톱질하다, 톱으로 자르다"},"tour":{"p":"투얼","k":"여행, 관광"},"growth":{"p":"그로우뜨","k":"성장"},"changes":{"p":"최인지","k":"바꾸다; 변하다"},"need":{"p":"니드","k":"(보통 복수로) 필요한 것"},"roles":{"p":"롤","k":"배역"},"failure":{"p":"페일열","k":"실패, 고장"},"railways":{"p":"뤠일웨이","k":"철도 회사"},"work":{"p":"월크","k":"효과가 있다"},"various":{"p":"","k":"여러 가지의, 다양한"},"dark":{"p":"달크","k":"어두운, 캄캄한"},"facing":{"p":"페이쓰","k":"~을 마주보다, 직면하다"},"businesses":{"p":"비즈니스","k":"사업"},"each":{"p":"이취","k":"각각의"},"airline":{"p":"","k":"항공사"},"case":{"p":"케이스","k":"경우, 사건"},"see":{"p":"씨","k":"보다"},"much":{"p":"머취","k":"(양이) 많은"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>

@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>고3 해석 도전</title>
+<style>
+:root{--ink:#111827;--sub:#6b7280;--line:#e5e7eb;--bg:#fffdf7;--card:#fff;
+      --blue:#1d4ed8;--green:#166534;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);
+     font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:17px;line-height:1.75}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 120px}
+header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:blur(6px);
+       border-bottom:1px solid var(--line);z-index:20}
+.hrow{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.hrow .t{font-weight:800}
+.hrow .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:#eef2ff;color:#3730a3}
+.timer{font-variant-numeric:tabular-nums;font-size:13px;color:var(--sub)}
+.timer.rest{color:var(--amber);font-weight:700}
+.step{display:flex;gap:6px;margin:12px 0 6px}
+.step div{flex:1;text-align:center;font-size:12px;font-weight:700;padding:7px 0;
+          border-radius:8px;background:#f3f4f6;color:#9ca3af}
+.step div.on{background:var(--ink);color:#fff}
+.step div.done{background:#dcfce7;color:var(--green)}
+h1{font-size:20px;margin:16px 0 4px}
+.sub{color:var(--sub);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+.psg{font-size:18px;line-height:2.05;word-break:keep-all}
+.w{cursor:pointer;border-radius:3px;padding:0 1px}
+.w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
+.w.look{background:#dbeafe}
+.blank{display:inline-block;min-width:92px;border-bottom:2px solid var(--ink);vertical-align:-3px}
+.mk{color:var(--blue);font-weight:800}
+.mkl{color:var(--amber);font-weight:800}
+.sec{color:#7c3aed;font-weight:800}
+.given{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:11px 13px;margin:0 0 12px}
+.foot{color:var(--sub);font-size:13px;margin-top:10px}
+.ch{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:11px;padding:12px 14px;margin:7px 0;font:inherit;color:inherit;cursor:pointer}
+.ch.sel{border-color:var(--blue);background:#eff6ff;font-weight:700}
+.ch.ok{border-color:var(--green);background:#f0fdf4;font-weight:800;color:var(--green)}
+.ch.no{border-color:var(--red);background:#fef2f2;color:var(--red)}
+.ch .n{font-weight:800;margin-right:8px}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:12px;background:var(--ink);
+     color:#fff;font:inherit;font-weight:800;cursor:pointer;margin:16px 0 0}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.35}
+.pop{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     box-shadow:0 -8px 30px rgba(0,0,0,.12);padding:16px 20px 22px;z-index:40;
+     transform:translateY(110%);transition:transform .18s}
+.pop.on{transform:none}
+.pop .e{font-size:21px;font-weight:800}
+.pop .p{color:var(--blue);font-size:14px;margin:2px 0 6px}
+.pop .k{font-size:17px}
+.pop .x{position:absolute;right:16px;top:12px;border:0;background:none;font-size:22px;color:var(--sub)}
+.say{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:14px;cursor:pointer}
+.sb{border-left:3px solid #d1d5db;padding:2px 0 2px 12px;margin:14px 0}
+.sn{font-size:12px;color:var(--sub);font-weight:700}
+.ck{display:inline-block;vertical-align:top;margin:0 10px 8px 0}
+.ck .en{display:block;font-family:Georgia,serif;font-size:16px}
+.ck .ko{display:block;color:#b91c1c;font-size:13px;font-weight:700}
+.gl{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0 0}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+         font:inherit;resize:vertical;min-height:64px;background:#fff}
+.lab{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 5px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5e7eb;margin-right:4px}
+.dot.on{background:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f9fafb}
+.verdict{border-radius:12px;padding:14px 16px;font-weight:700;margin:12px 0}
+.v1{background:#f0fdf4;color:var(--green)}
+.v2{background:#fffbeb;color:var(--amber)}
+.v3{background:#fef2f2;color:var(--red)}
+.list a{display:block;padding:13px 4px;border-bottom:1px solid var(--line);
+        color:inherit;text-decoration:none}
+.list a b{color:var(--blue)}
+.hide{display:none}
+.warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;
+      padding:10px 13px;font-size:14px;margin:10px 0}
+</style><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><meta name="googlebot" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#fffdf7"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="gate" style="position:fixed;inset:0;background:#fffdf7;z-index:99;
+     display:flex;align-items:center;justify-content:center">
+  <div style="width:min(360px,86vw);text-align:center">
+    <div style="font-size:19px;font-weight:800;margin-bottom:6px">고3 해석 도전</div>
+    <div style="color:#6b7280;font-size:14px;margin-bottom:16px">비밀번호를 넣어 주세요</div>
+    <input id="gpw" type="password" inputmode="text" autocomplete="off"
+      style="width:100%;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:17px;text-align:center">
+    <div id="gmsg" style="color:#b91c1c;font-size:13px;height:20px;margin-top:6px"></div>
+    <button onclick="gtry()" style="width:100%;padding:14px;border:0;border-radius:10px;
+      background:#111827;color:#fff;font-size:16px;font-weight:800">들어가기</button>
+  </div>
+</div>
+<script>
+function ghash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0;}return h;}
+var GKEY=445125949;
+function gopen(){document.getElementById("gate").style.display="none";}
+function gtry(){
+  var v=document.getElementById("gpw").value;
+  if(ghash(v)===GKEY){ try{localStorage.setItem("g_ok","1");}catch(e){} gopen(); }
+  else document.getElementById("gmsg").textContent="비밀번호가 다릅니다";
+}
+document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key==="Enter") gtry(); });
+try{ if(localStorage.getItem("g_ok")==="1") gopen(); }catch(e){}
+</script>
+
+<header><div class="hrow">
+  <span class="t" id="htitle">고３ 해석 도전</span>
+  <span class="pill" id="hpill"></span>
+  <span class="sp"><span class="timer" id="timer">0:00</span></span>
+</div></header>
+
+<div class="wrap" id="app"></div>
+
+<div class="pop" id="pop">
+  <button class="x" onclick="closePop()">✕</button>
+  <div class="e" id="pe"></div>
+  <div class="p" id="pp"></div>
+  <div class="k" id="pk"></div>
+  <div style="margin-top:10px"><button class="say" id="psay">🔊 소리</button></div>
+</div>
+
+<script>
+window.DATA=[{"id":"2026-06-31","y":2026,"m":6,"q":31,"type":"빈칸추론","instr":"다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.","given":"","psg":"Ever since the early Enlightenment, preservation and conservation have been closely related. Taken as near synonyms, their meaning is to maintain an object or system insofar as possible in its present state, to protect it from change, usually for contemplation, research, display, and perhaps for use. Conservationists who distinguish their activities from preservation emphasize conservation's restorative aspects ― restoring a historical musical instrument, for example, or a painting, or a dinosaur, or an ecosystem. Conservationists acknowledge change but try to manage it in order to prolong a(n) _____ state. Preservationists (who may nonetheless call themselves conservationists) think of themselves more as protectors. They sometimes criticize conservationists for setting an additional priority on yield or harvest or use, rather than interfering as minimally as possible in order to preserve the original object or system, as they would do. Preservationists would, for example, prefer to keep a historical musical instrument \"as found\" in a deteriorated state, for study, rather than to restore or repair it for display or use.","ch":["desired","unstable","isolated","natural","delicate"],"ans":1,"pts":2,"foot":[{"word":"contemplation","gloss":"주시(注視)"},{"word":"deteriorate","gloss":"나쁘게 하다"}],"needImg":false,"sents":[{"ck":[["Ever since the early Enlightenment,","초기 계몽주의 이후로 줄곧"],["preservation and conservation","보존과 보전은"],["have been closely related.","밀접하게 관련되어 왔다"]],"g":"계몽주의 초기 이래로 '보존'과 '보전'은 서로 가까운 말이었다."},{"ck":[["Taken as near synonyms,","거의 동의어로 받아들여질 때"],["their meaning is to maintain an object or system","그것들의 의미는 사물이나 체계를 유지하는 것이다"],["insofar as possible in its present state,","가능한 한 그것의 현재 상태로"],["to protect it from change,","그것을 변화로부터 보호하는 것이다"],["usually for contemplation, research, display,","보통 주시, 연구, 전시를 위해"],["and perhaps for use.","그리고 아마도 사용을 위해"]],"g":"거의 같은 말로 쓸 때 둘 다 '되도록 현재 상태로 유지하고 변화로부터 지킨다'는 뜻이다 — 주시·연구·전시, 때로는 사용을 위해."},{"ck":[["Conservationists who distinguish their activities","자기 활동을 구별하는 보전주의자들은"],["from preservation","보존과"],["emphasize conservation's restorative aspects","보전의 복원적 측면을 강조한다"],["― restoring a historical musical instrument, for example,","― 예를 들어 역사적인 악기를 복원하는 것"],["or a painting, or a dinosaur, or an ecosystem.","혹은 그림, 공룡, 생태계를"]],"g":"보전주의자는 자기 일을 보존과 구별하며 <b>복원</b>을 내세운다 — 옛 악기, 그림, 공룡, 생태계를 되살리는 일이다."},{"ck":[["Conservationists acknowledge change","보전주의자들은 변화를 인정한다"],["but try to manage it","하지만 그것을 관리하려 한다"],["in order to prolong a(n) _____ state.","_____ 상태를 연장하기 위해"]],"g":"보전주의자는 변화를 인정하되, <b>원하는</b> 상태를 오래 끌고 가려고 변화를 관리한다."},{"ck":[["Preservationists","보존주의자들은"],["(who may nonetheless call themselves conservationists)","(그럼에도 스스로를 보전주의자라 부를 수도 있는)"],["think of themselves more as protectors.","자신을 보호자에 더 가깝다고 여긴다"]],"g":"보존주의자는 (스스로를 보전주의자라 부르기도 하지만) 자신을 <b>지키는 사람</b>으로 여긴다."},{"ck":[["They sometimes criticize conservationists","그들은 때때로 보전주의자들을 비판한다"],["for setting an additional priority","추가적인 우선순위를 두는 것에 대해"],["on yield or harvest or use,","산출량이나 수확 또는 이용에"],["rather than interfering as minimally as possible","가능한 한 최소한으로 개입하기보다는"],["in order to preserve the original object or system,","원래의 사물이나 체계를 보존하기 위해"],["as they would do.","자신들이 하듯이"]],"g":"보존주의자는, 개입을 최소로 해 원본을 지키기보다 <b>산출·수확·이용</b>에 우선순위를 더 두는 보전주의자를 비판하기도 한다."},{"ck":[["Preservationists would, for example,","예를 들어 보존주의자는"],["prefer to keep a historical musical instrument","역사적인 악기를 유지하는 쪽을 선호할 것이다"],["\"as found\" in a deteriorated state,","손상된 상태 그대로 '발견된 그대로'"],["for study,","연구를 위해"],["rather than to restore or repair it","그것을 복원하거나 수리하기보다는"],["for display or use.","전시나 이용을 위해"]],"g":"가령 보존주의자는 옛 악기를 전시·사용하려 고치기보다, 연구를 위해 <b>망가진 그대로</b> 두는 편을 택한다."}],"theme":"<b>보존(preservation)</b>과 <b>보전(conservation)</b>의 차이를 가르는 글이다. 거의 동의어로 쓰일 때 둘 다 '지금 상태 그대로 지키고 변화로부터 보호한다'는 뜻이다. 그러나 자기 활동을 구별하는 보전주의자는 <b>복원</b>의 측면을 강조한다 — 악기·그림·공룡·생태계를 되살리는 것이다. 이들은 변화를 인정하되, 원하는 상태를 오래 끌고 가려고 변화를 <b>관리</b>한다. 반면 보존주의자는 스스로를 보호자로 여겨, 개입을 최소로 하고 손상된 악기도 <b>'발견된 그대로'</b> 두는 쪽을 택한다.","why":"빈칸 문장은 '보전주의자는 변화를 인정하되 <u>____</u> 상태를 <b>연장하려고</b> 관리한다'입니다. 연장하고 싶은 상태라면 <b>원하는(desired)</b> 상태여야 말이 됩니다. ② unstable(불안정한)·⑤ delicate(취약한) 상태를 일부러 늘리려 할 이유가 없고, ④ natural은 뒤에 나오는 '복원·수확·이용'과 어긋납니다.","rub":[["① 보존 vs 보전","보존 · 보전 · preservation · conservation · 구별 · 차이"],["② 보전 = 복원·관리","복원 · 되살 · 고치 · 수리 · 관리 · 변화 인정 · 이용 · 수확"],["③ 보존 = 그대로 두기","그대로 · 원래 · 손대지 · 최소 · 개입 · 보호 · 발견된 그대로"]],"dic":{"enlightenment":{"p":"인라이튼먼트","k":"계몽주의"},"preservation":{"p":"프뤠절베이션","k":"보존(원래 상태 그대로 지킴)"},"conservation":{"p":"칸썰베이션","k":"보전(관리하며 지킴)"},"synonym":{"p":"씨너님","k":"동의어"},"maintain":{"p":"메인테인","k":"유지하다"},"insofar as":{"p":"인쏘우팔 애즈","k":"~하는 한"},"present state":{"p":"프뤠즌트 스테잇","k":"현재 상태"},"contemplation":{"p":"칸템플레이션","k":"주시, 깊이 바라봄 (각주)"},"display":{"p":"디스플레이","k":"전시"},"distinguish a from b":{"p":"디스팅귀쉬","k":"A를 B와 구별하다"},"emphasize":{"p":"엠퍼싸이즈","k":"강조하다"},"restorative":{"p":"뤼스토뤄티브","k":"복원의"},"aspect":{"p":"애스펙트","k":"측면"},"restore":{"p":"뤼스토얼","k":"복원하다"},"instrument":{"p":"인스트뤄먼트","k":"악기, 기구"},"ecosystem":{"p":"에코우씨스텀","k":"생태계"},"acknowledge":{"p":"억날리지","k":"인정하다"},"prolong":{"p":"프뤄롱","k":"연장하다"},"nonetheless":{"p":"넌덜레스","k":"그럼에도 불구하고"},"criticize":{"p":"크뤼티싸이즈","k":"비판하다"},"priority":{"p":"프롸이오뤄티","k":"우선순위"},"yield":{"p":"일드","k":"산출량"},"harvest":{"p":"할비스트","k":"수확"},"interfere":{"p":"인털피얼","k":"개입하다, 간섭하다"},"minimally":{"p":"미니멀리","k":"최소한으로"},"deteriorated":{"p":"디티뤼오뤠이릿","k":"손상된, 나빠진 (각주)"},"repair":{"p":"뤼페얼","k":"수리하다"},"desired":{"p":"디자이얼드","k":"바라는, 원하는"},"may":{"p":"메이","k":"~해도 좋다"},"keep":{"p":"킵","k":"유지하다, 지키다"},"natural":{"p":"내춰뤌","k":"자연의, 천연의, 타고난"},"manage":{"p":"매니쥐","k":"조절하다, 다루다"},"distinguish":{"p":"디스띵귀시","k":"구별하다"},"related":{"p":"","k":"관계를 맺다"},"aspects":{"p":"애스펙트","k":"측면"},"musical":{"p":"뮤지컬","k":"음악의, 뮤지컬"},"activities":{"p":"액티비피","k":"활동, 움직임"},"order":{"p":"오덜","k":"질서를 세우다"},"call":{"p":"콜","k":"부르다, 전화하다"},"state":{"p":"스떼잇","k":"상태"},"setting":{"p":"","k":"배경"},"usually":{"p":"유줠리","k":"보통, 대개"},"from":{"p":"프럼","k":"~에서, ~부터"},"possible":{"p":"파써블","k":"가능한"},"have":{"p":"해브","k":"먹다"},"change":{"p":"최인지","k":"바꾸다; 변하다"},"interfering":{"p":"인털피얼","k":"개입하다, 간섭하다"},"research":{"p":"뤼썰치","k":"연구, 조사"},"present":{"p":"프레즌트","k":"주다, 수여하다"},"additional":{"p":"어디셔널","k":"추가의"},"isolated":{"p":"아이썰레잇","k":"고립시키다, 격리하다"},"protect":{"p":"프러텍트","k":"보호하다, 지키다"},"preserve":{"p":"프뤼절브","k":"보존하다, 유지하다"},"painting":{"p":"페인팅","k":"그림, 회화"},"delicate":{"p":"델리킷","k":"취"},"near":{"p":"니얼","k":"~근처에, 가까이"},"prefer":{"p":"","k":"선호하다"},"try":{"p":"트라이","k":"노력하다, 애를 쓰다; 시도하다"},"historical":{"p":"히스또뤼컬","k":"역사의, 역사적인"},"restoring":{"p":"뤼스토얼","k":"복원하다"},"taken":{"p":"테익","k":"가져오다, 데려오다"},"since":{"p":"","k":"~이래 줄곧"},"synonyms":{"p":"씨너님","k":"동의어"},"use":{"p":"유즈","k":"사용하다"},"object":{"p":"어브죅트","k":"반대하다"},"found":{"p":"파운드","k":"설립하다"},"closely":{"p":"","k":"가까이, 밀접하게"},"original":{"p":"어뤼쥐널","k":"원래의"},"meaning":{"p":"미닝","k":"의미, 뜻"},"early":{"p":"얼리","k":"일찍; 이른"},"think":{"p":"띵크","k":"생각하다"},"study":{"p":"스떠디","k":"공부하다"},"sometimes":{"p":"썸타임즈","k":"때때로, 가끔"},"system":{"p":"씨스텀","k":"체계, 시스템"}}}];
+var MANY = false;
+
+/* ---------- 저장 ---------- */
+var KEY = "go3read";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+var ST = load();
+function rec(id){ if(!ST[id]) ST[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",sec:0}; return ST[id]; }
+
+/* ---------- 시계: 손이 멈추면 멈춘다 ---------- */
+var cur=null, tick=null, idle=0;
+function startClock(){
+  stopClock();
+  tick=setInterval(function(){
+    idle++;
+    if(idle<=60){ var r=rec(cur.id); r.sec++; save(ST); }
+    var t=document.getElementById("timer"); if(!t) return;
+    var s=rec(cur.id).sec, m=Math.floor(s/60);
+    t.textContent=m+":"+String(s%60).padStart(2,"0");
+    t.className="timer"+(idle>60?" rest":"");
+    if(idle>60) t.textContent+=" 쉬는 중";
+  },1000);
+}
+function stopClock(){ if(tick){clearInterval(tick);tick=null;} }
+["pointerdown","keydown","input"].forEach(function(ev){
+  document.addEventListener(ev,function(){ idle=0; },true);
+});
+
+/* ---------- 소리 ---------- */
+function speak(w){
+  try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u.rate=.85;
+       speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ---------- 지문 글자 만들기 ---------- */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function markup(txt){
+  var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
+  while((m=re.exec(txt))){
+    if(m[1]) out+='<span class="w" data-w="'+m[1].toLowerCase()+'">'+esc(m[1])+'</span>';
+    else if(m[2]) out+='<span class="blank"></span>';
+    else if(m[3]) out+='<span class="mk">'+m[3]+'</span>';
+    else if(m[4]) out+='<span class="'+(/[A-D]/.test(m[4])?'sec':'mkl')+'">'+m[4]+'</span>';
+    else out+=esc(m[5]);
+  }
+  return out;
+}
+var CIRC="①②③④⑤";
+
+/* ---------- 화면 ---------- */
+function go(id){
+  cur=DATA.filter(function(d){return d.id===id;})[0];
+  location.hash=id; render(); window.scrollTo(0,0);
+}
+function listView(){
+  stopClock(); cur=null; location.hash="";
+  document.getElementById("hpill").textContent="";
+  document.getElementById("timer").textContent="";
+  var by={};
+  DATA.forEach(function(d){ var k=d.y+"년 "+d.m+"월"; (by[k]=by[k]||[]).push(d); });
+  var h='<h1>고3 해석 도전</h1><p class="sub">지문 '+DATA.length+'개 · 한 지문을 세 번 만난다</p>';
+  Object.keys(by).forEach(function(k){
+    h+='<h2 style="font-size:16px;margin:22px 0 4px">'+k+'</h2><div class="list">';
+    by[k].forEach(function(d){
+      var r=ST[d.id], done=r&&r.round>3;
+      h+='<a href="javascript:go(\''+d.id+'\')"><b>'+d.q+'번</b> · '+d.type+
+         (done?' <span style="color:#166534">✔ 끝</span>':(r?' <span style="color:#b45309">'+r.round+'차 진행 중</span>':''))+'</a>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("app").innerHTML=h;
+}
+function render(){
+  var d=cur, r=rec(d.id);
+  document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  document.getElementById("htitle").innerHTML= MANY
+    ? '<a href="javascript:listView()" style="color:inherit;text-decoration:none">← 목록</a>'
+    : '고３ 해석 도전';
+  var h='<div class="step">'+
+    [1,2,3].map(function(n){
+      var c = r.round>n ? "done" : (r.round===n?"on":"");
+      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div>';
+  if(r.round===1) h+=round1(d,r);
+  else if(r.round===2) h+=round2(d,r);
+  else h+=round3(d,r);
+  document.getElementById("app").innerHTML=h;
+  bindWords();
+  startClock();
+}
+
+function head(d){
+  var h='<p class="sub" style="margin:10px 0 6px">'+esc(d.instr)+'</p>';
+  if(d.needImg) h+='<div class="warn">이 문항은 도표 그래프가 필요합니다. 종이 문제지를 함께 보세요.</div>';
+  if(d.given) h+='<div class="given">'+markup(d.given)+'</div>';
+  return h;
+}
+function choices(d,r,sel,reveal,lock){
+  if(!d.ch.length) return '<p class="sub">번호를 고르세요 (본문의 ①~⑤ 위치)</p>'+
+    [1,2,3,4,5].map(function(n){
+      var c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+      return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[n-1]+'</span></button>';
+    }).join("");
+  return d.ch.map(function(t,i){
+    var n=i+1, c="ch"+(sel===n?" sel":"")+(reveal?(n===d.ans?" ok":(sel===n?" no":"")):"");
+    return '<button class="'+c+'" '+(lock?"disabled":"")+' onclick="pick('+n+')"><span class="n">'+CIRC[i]+'</span>'+esc(t)+'</button>';
+  }).join("");
+}
+
+/* ---- 1차 : 사전 잠김 ---- */
+function round1(d,r){
+  return head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div>'+
+   (d.foot.length?'<p class="foot">'+d.foot.map(function(f){return "*"+esc(f.word)+": "+esc(f.gloss);}).join(" · ")+'</p>':'')+
+   '</div>'+
+   '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b> 시험장처럼 넘어가며 푸세요.</p>'+
+   choices(d,r,r.a1,false,false)+
+   '<button class="btn" id="go1" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>';
+}
+function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(ST); render(); window.scrollTo(0,0); }
+
+/* ---- 2차 : 사전 열림 ---- */
+function round2(d,r){
+  var h=head(d)+
+   '<div class="card"><div class="psg" id="psg">'+markup(d.psg)+'</div></div>'+
+   '<p class="sub">이제 단어를 누르면 <b>뜻이 뜹니다.</b> 1차에 표시한 단어엔 색이 남아 있습니다.</p>'+
+   '<div class="lab">문장별 해석 — 쓸 수 있는 만큼만 쓰세요</div>';
+  d.sents.forEach(function(s,i){
+    var en=s.ck.map(function(c){return c[0];}).join(" ");
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div style="font-family:Georgia,serif">'+markup(en)+'</div>'+
+       '<textarea data-i="'+i+'" placeholder="여기에 해석을 쓰세요 (S펜으로 써도 글자로 바뀝니다)">'+esc(r.trans[i]||"")+'</textarea></div>';
+  });
+  h+='<div class="lab">같은 문제를 다시 풀어 보세요 (1차 답은 잠겨 있습니다)</div>'+
+     '<p class="sub">1차에 고른 답: <b>'+CIRC[r.a1-1]+'</b></p>'+
+     choices(d,r,r.a2,false,false)+
+     '<button class="btn" onclick="submit2()" '+(r.a2?"":"disabled")+'>2차 제출하고 정답 확인</button>';
+  return h;
+}
+function submit2(){
+  var r=rec(cur.id);
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){ r.trans[t.dataset.i]=t.value; });
+  if(!r.a2) return;
+  r.round=3; save(ST); render(); window.scrollTo(0,0);
+}
+
+/* ---- 3차 : 정답 확인 ---- */
+function judge(sum,rub){
+  var s=(sum||"").replace(/\s/g,"");
+  return rub.map(function(row){
+    return row[1].split("·").some(function(k){ k=k.trim().replace(/\s/g,""); return k && s.indexOf(k)>=0; });
+  });
+}
+function round3(d,r){
+  var ok1=r.a1===d.ans, ok2=r.a2===d.ans;
+  var v = ok1&&ok2 ? ["v1","확실히 안다","난도를 올려도 됩니다."]
+        : (!ok1&&ok2 ? ["v2","어휘 때문에 틀렸다","독해력 문제가 아닙니다. 단어장으로 해결됩니다."]
+        : (ok1&&!ok2 ? ["v2","1차는 찍었을 가능성","실력으로 오해하면 안 되는 구간입니다."]
+        : ["v3","독해·논리의 문제","단어를 외워도 안 오릅니다. 선생님과 함께 봐야 합니다."]));
+  var hits=judge(r.sum,d.rub), n=hits.filter(Boolean).length;
+  var h=head(d)+
+   '<div class="verdict '+v[0]+'">1차 '+(ok1?"○":"✕")+' · 2차 '+(ok2?"○":"✕")+' → '+v[1]+'<br>'+
+   '<span style="font-weight:400;font-size:14px">'+v[2]+'</span></div>'+
+   '<div class="card"><div class="psg">'+markup(d.psg)+'</div></div>'+
+   choices(d,r,r.a2,true,true)+
+   '<div class="lab">줄거리 · 주제</div><div class="card">'+d.theme+'</div>'+
+   (d.why?'<p class="sub">'+d.why+'</p>':'')+
+   '<div class="lab">슬래시 해석</div>';
+  d.sents.forEach(function(s,i){
+    h+='<div class="sb"><div class="sn">'+(i+1)+'</div><div>'+
+       s.ck.map(function(c){return '<span class="ck"><span class="en">'+esc(c[0])+'</span><span class="ko">'+
+         (c===s.ck[0]?"":"/ ")+esc(c[1])+'</span></span>';}).join("")+
+       '</div><div class="gl">'+s.g+'</div>'+
+       (r.trans[i]?'<div class="sub" style="margin-top:6px">내가 쓴 해석 · '+esc(r.trans[i])+'</div>':'')+
+       '</div>';
+  });
+  h+='<div class="lab">한 줄 요약 — 지문을 덮고 15~40자로</div>'+
+     '<textarea id="sum" oninput="reJudge()" placeholder="이 글을 한 문장으로">'+esc(r.sum)+'</textarea>'+
+     '<div id="sumres" style="margin:10px 0">'+sumRes(hits,d,r.sum)+'</div>'+
+     '<div class="lab">틀렸다면 — 왜 틀렸나</div>'+
+     ["단어를 몰라서","문장 구조를 못 풀어서","글의 흐름을 놓쳐서","선택지를 잘못 읽어서","시간이 모자라서","찍었다"]
+       .map(function(c){ return '<button class="ch'+(r.cause===c?" sel":"")+'" onclick="setCause(\''+c+'\')">'+c+'</button>'; }).join("")+
+     '<button class="btn" onclick="finish()">정리 끝내기</button>'+
+     (MANY?'<button class="btn ghost" onclick="listView()">목록으로</button>':'');
+  return h;
+}
+function sumRes(hits,d,sum){
+  if(!sum) return '<p class="sub">요약을 쓰면 핵심 요소가 몇 개 담겼는지 바로 세어 줍니다.</p>';
+  var miss=d.rub.filter(function(_,i){return !hits[i];}).map(function(r){return r[0];});
+  return '<div>'+hits.map(function(x){return '<span class="dot'+(x?" on":"")+'"></span>';}).join("")+
+    ' <b>핵심 '+hits.filter(Boolean).length+'/'+d.rub.length+'</b></div>'+
+    '<table style="margin-top:8px"><tr><th>핵심 요소</th><th>담겼나</th></tr>'+
+    d.rub.map(function(row,i){return '<tr><td>'+row[0]+'</td><td>'+(hits[i]?"○":"—")+'</td></tr>';}).join("")+
+    '</table>'+(miss.length?'<p class="sub">빠진 것: '+miss.join(", ")+'</p>':'<p class="sub" style="color:#166534">다 담겼습니다.</p>');
+}
+function reJudge(){
+  var r=rec(cur.id); r.sum=document.getElementById("sum").value; save(ST);
+  document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
+}
+function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(ST); render(); }
+function finish(){ var r=rec(cur.id); r.round=4; save(ST); if(MANY) listView(); else render(); }
+
+/* ---------- 단어 누르기 ---------- */
+function pick(n){
+  var r=rec(cur.id);
+  if(r.round===1) r.a1=n; else if(r.round===2) r.a2=n; else return;
+  save(ST); render();
+}
+function bindWords(){
+  var r=cur?rec(cur.id):null; if(!r) return;
+  document.querySelectorAll(".w").forEach(function(el){
+    var w=el.dataset.w;
+    if(r.unk.indexOf(w)>=0) el.classList.add(r.round===1?"unk":"look");
+    el.onclick=function(){
+      if(r.round===1){
+        var i=r.unk.indexOf(w);
+        if(i>=0){ r.unk.splice(i,1); } else { r.unk.push(w); }
+        save(ST);
+        document.querySelectorAll('.w[data-w="'+w+'"]').forEach(function(e2){ e2.classList.toggle("unk"); });
+      }else{
+        if(r.unk.indexOf(w)<0){ r.unk.push(w); save(ST); }
+        showWord(w);
+      }
+    };
+  });
+  document.querySelectorAll("textarea[data-i]").forEach(function(t){
+    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(ST); };
+  });
+}
+function showWord(w){
+  var e=cur.dic[w];
+  document.getElementById("pe").textContent=w;
+  document.getElementById("pp").textContent=e?(e.p||""):"";
+  document.getElementById("pk").textContent=e?e.k:"이 지문 사전에 없는 단어입니다.";
+  document.getElementById("psay").onclick=function(){ speak(w); };
+  document.getElementById("pop").classList.add("on");
+}
+function closePop(){ document.getElementById("pop").classList.remove("on"); }
+
+/* ---------- 시작 ---------- */
+(function(){
+  var h=location.hash.replace("#","");
+  if(!MANY || (h && DATA.some(function(d){return d.id===h;}))) {
+    cur = h ? DATA.filter(function(d){return d.id===h;})[0] : DATA[0];
+    render();
+  } else listView();
+})();
+</script>
+</body></html>
