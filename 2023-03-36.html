@@ -28,7 +28,7 @@ header{position:sticky;top:0;background:rgba(255,253,247,.96);backdrop-filter:bl
 .pill{font-size:13.5px;font-weight:700;border-radius:999px;padding:4px 11px;background:#e3e9ff;color:#2b2a86}
 .timer{font-variant-numeric:tabular-nums;font-size:15px;font-weight:700;color:#414a68}
 .timer.rest{color:var(--amber);font-weight:700}
-nav{display:flex;gap:6px;margin:12px 0}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
 nav button{flex:1;border:1.5px solid #c9cfe6;background:#fff;border-radius:10px;padding:11px 0;
            font:inherit;font-size:14.5px;font-weight:700;color:#414a68;cursor:pointer}
 nav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -44,6 +44,11 @@ h2{font-size:16px;margin:22px 0 6px}
           border-radius:999px;background:#e6e9f6;color:#535c7a;border:1px solid #d2d8ee}
 .step div.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 .step div.done{background:var(--mint);color:#0b7a44;border:1px solid var(--mintL)}
+.step div.go{cursor:pointer}
+.step div.go:active{transform:scale(.97)}
+/* 아직 못 넘어가는 이유를 알려 주는 말풍선 */
+.tip{background:#fff7ed;border:2px solid #fdba74;color:#9a3412;border-radius:12px;
+     padding:10px 14px;margin:8px 0;font-weight:700;font-size:14.5px}
 .psg{font-size:18px;line-height:2.05;word-break:keep-all}
 .w{cursor:pointer;border-radius:3px;padding:0 1px}
 .w.unk{background:#fef3c7;box-shadow:inset 0 -2px 0 #f59e0b}
@@ -65,6 +70,8 @@ h2{font-size:16px;margin:22px 0 6px}
 .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid #c2c9e2}
 .btn.sm{padding:11px;font-size:15px;margin:8px 0 0}
 .btn:disabled{opacity:.5;background:#8e96b4}
+/* 아직 조건이 모자란 단추 — 흐리게 보이되 눌리기는 한다(누르면 이유를 말해 준다) */
+.btn.dim{background:#9aa2bd}
 .btn.ghost:disabled{background:#f1f2f8;color:#6b7390}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .row .btn{flex:1;min-width:120px}
@@ -167,9 +174,13 @@ th{background:#f9fafb}
 @media (orientation:landscape) and (min-width:680px){
   .wrap{max-width:1500px;padding:0 16px 12px}
   .hrow{max-width:1500px}
-  /* 지문을 푸는 화면에서만 화면을 고정한다 (목록·단어장은 평소대로 스크롤) */
-  body.solving{height:100vh;overflow:hidden}
-  body.solving .wrap{height:calc(100vh - 57px);display:flex;flex-direction:column}
+  /* 지문을 푸는 화면에서만 화면을 고정한다 (목록·단어장은 평소대로 스크롤)
+     ⚠ 100vh 를 그대로 쓰면 안 된다 — 안드로이드 탭에서 100vh 는 "주소창이 숨겨졌을 때"의
+     높이라 실제 보이는 화면보다 크다. body 가 overflow:hidden 이라 밀어 올릴 수도 없어서
+     맨 아래 제출 단추가 화면 밖으로 잘려 영영 안 눌린다(2026-07-31 사장님 신고).
+     --appvh 는 JS(fitVH)가 실제로 보이는 높이를 재서 넣어 준다. 키보드가 올라와도 따라온다. */
+  body.solving{height:var(--appvh,100vh);overflow:hidden}
+  body.solving .wrap{height:calc(var(--appvh,100vh) - 57px);display:flex;flex-direction:column}
   body.solving .step{flex:none;margin:8px 0 6px}
   body.solving .step div{padding:6px 0;font-size:13px}
   .split{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;
@@ -179,8 +190,9 @@ th{background:#f9fafb}
   .split .colA{border-right:1px solid var(--line)}
   .split .colA .card{margin-top:0}
   /* 제출 단추는 오른쪽 칸 맨 아래에 붙어 따라다닌다 — 끝까지 내리지 않아도 눌린다 */
-  .split .colB .stickB{position:sticky;bottom:0;background:var(--bg);
-         padding:9px 0 4px;margin-top:8px;box-shadow:0 -8px 12px -8px rgba(80,90,160,.35)}
+  .split .colB .stickB{position:sticky;bottom:0;background:var(--bg);z-index:5;
+         padding:9px 0 calc(4px + env(safe-area-inset-bottom));margin-top:8px;
+         box-shadow:0 -8px 12px -8px rgba(80,90,160,.35)}
   .split .colB .btn{margin-top:8px}
   .psg{font-size:17px;line-height:1.95}
 }
@@ -281,7 +293,7 @@ document.getElementById("gpw").addEventListener("keydown",function(e){ if(e.key=
 </div>
 
 <script>
-window.__ENC__="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";
+window.__ENC__="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";
 var MANY = false;
 /* 유형이 22가지라 그대로 늘어놓으면 고르기 힘들다. 큰 덩어리로 묶는다.
    장문(41~45)은 한 지문을 나눠 푸는 것이라 통째로 하나. */
@@ -309,7 +321,17 @@ var KEY="go3read";
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
 var ST=load();
 ST.rec=ST.rec||{}; ST.bank=ST.bank||{}; ST.test=ST.test||{n:0,ok:0};
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(ST)); }catch(e){} }
+/* 저장이 실패해도 조용히 넘어가면 학생은 다 날린 뒤에야 안다 — 한 번은 알려 준다 */
+var saveFail=false;
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(ST)); saveFail=false; }
+  catch(e){
+    if(!saveFail){
+      saveFail=true;
+      alert("기록을 저장하지 못했습니다.\n탭의 저장 공간이 찼을 수 있습니다.\n\n[관리] 화면에서 백업 파일을 내려받고,\n오래된 기록을 지운 뒤 다시 해 주세요.");
+    }
+  }
+}
 function rec(id){
   if(!ST.rec[id]) ST.rec[id]={round:1,unk:[],a1:null,a2:null,trans:{},sum:"",cause:"",
                               sec:0,idi:{},d:today()};   /* d = 처음 손댄 날 */
@@ -326,6 +348,24 @@ function bankAdd(w,p,k,t,src){
   else { if(k&&!ST.bank[key].k) ST.bank[key].k=k; }
   save(); return key;
 }
+
+/* ================= 화면 높이 재기 =================
+   안드로이드 탭의 100vh 는 주소창을 뺀 높이가 아니다 — 그대로 쓰면 맨 아래 제출 단추가
+   화면 밖으로 잘린다. 실제로 보이는 높이를 재서 --appvh 에 넣고, 키보드가 오르내릴 때마다
+   다시 잰다. (2026-07-31 "2차 제출하고 정답 확인이 안 보인다" 수리) */
+function fitVH(){
+  var vv=window.visualViewport, h=vv?vv.height:window.innerHeight;
+  if(!h) h=document.documentElement.clientHeight;
+  document.documentElement.style.setProperty("--appvh", Math.round(h)+"px");
+}
+fitVH();
+["resize","orientationchange","pageshow"].forEach(function(e){ window.addEventListener(e,fitVH); });
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize",fitVH);
+  window.visualViewport.addEventListener("scroll",fitVH);
+}
+/* 주소창이 접히는 순간에는 이벤트가 늦게 온다 — 처음 몇 초만 따라간다 */
+setTimeout(fitVH,300); setTimeout(fitVH,1200); setTimeout(fitVH,3000);
 
 /* ================= 시계 ================= */
 var cur=null, tick=null, idle=0;
@@ -347,7 +387,10 @@ function speak(w){ try{ var u=new SpeechSynthesisUtterance(w); u.lang="en-US"; u
   speechSynthesis.cancel(); speechSynthesis.speak(u);}catch(e){} }
 
 /* ================= 글자 ================= */
-function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+/* 큰따옴표까지 바꿔야 한다 — 학생이 쓴 답을 value="..." 안에 넣는 자리가 있어서,
+   따옴표가 그대로 들어가면 그 칸이 통째로 깨진다. (2026-07-31) */
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+                               .replace(/"/g,"&quot;"); }
 function markup(txt){
   var out="", re=/([A-Za-z][A-Za-z'’\-]*)|(_____)|([①②③④⑤])|(\([a-eA-D]\))|([\s\S])/g, m;
   while((m=re.exec(txt))){
@@ -585,10 +628,16 @@ function go(id){ nav("read",id); }
 function readView(){
   var d=cur, r=rec(d.id);
   document.getElementById("hpill").textContent=d.y+"."+d.m+" "+d.q+"번 "+d.type;
+  /* 1·2·3차 표시는 알약처럼 생겨서 학생이 누른다. 예전에는 눌러도 아무 일도 없어서
+     "3차가 안 눌린다"는 신고가 왔다 → 실제로 눌리게 하고, 아직 못 가는 차수를 누르면
+     왜 못 가는지 말해 준다. (2026-07-31) */
+  var cr=Math.min(r.round,3);
   var h='<div class="step">'+[1,2,3].map(function(n){
-      var c=r.round>n?"done":(r.round===n?"on":"");
-      return '<div class="'+c+'">'+n+'차 '+["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
-    }).join("")+'</div>';
+      var c=cr>n?"done":(cr===n?"on":"");
+      if(cr!==n) c+=" go";
+      return '<div class="'+c+'" onclick="stepTap('+n+')">'+n+'차 '+
+             ["사전 잠김","사전 열림","정답 확인"][n-1]+'</div>';
+    }).join("")+'</div><div id="steptip"></div>';
   h += r.round===1?round1(d,r) : r.round===2?round2(d,r) : round3(d,r);
   document.getElementById("app").innerHTML=h;
   bindWords(); startClock(); topCols();
@@ -644,13 +693,48 @@ function round1(d,r){
    '<div class="colB">'+headB(d)+
      '<p class="sub">모르는 단어를 눌러 표시해 두세요. <b>뜻은 아직 안 뜹니다.</b></p>'+
      choices(d,r,r.a1,false,false)+
+     /* 단추를 disabled 로 죽이면 눌러도 아무 반응이 없어 "고장났다"고 느낀다.
+        항상 눌리게 두고, 조건이 모자라면 이유를 말해 준다. (2026-07-31) */
      '<div class="stickB">'+
-       '<button class="btn" onclick="submit1()" '+(r.a1?"":"disabled")+'>1차 제출하고 2차로</button>'+
+       '<button class="btn'+(r.a1?"":" dim")+'" onclick="submit1()">1차 제출하고 2차로</button>'+
        (r.a1?"":'<p class="mini" style="text-align:center;margin:4px 0 0">답을 하나 고르면 넘어갈 수 있습니다</p>')+
      '</div>'+
    '</div></div>';
 }
-function submit1(){ var r=rec(cur.id); if(!r.a1) return; r.round=2; save(); draw(); window.scrollTo(0,0); }
+function submit1(){
+  var r=rec(cur.id);
+  if(!r.a1){ stepTip("답을 하나 고르면 2차로 넘어갑니다."); return; }
+  r.round=2; save(); draw(); window.scrollTo(0,0);
+}
+/* 위쪽 1·2·3차 알약을 눌렀을 때 */
+function stepTip(msg){
+  var el=document.getElementById("steptip");
+  if(el) el.innerHTML = msg?'<div class="tip">'+msg+'</div>':"";
+}
+function stepTap(n){
+  var r=rec(cur.id);
+  var cr=Math.min(r.round,3);       /* 4 = 정리까지 끝낸 것 — 화면은 3차다 */
+  if(n===cr){ stepTip(""); return; }
+  /* 이미 지나온 차수로 되돌아가기 — 고른 답과 쓴 해석은 그대로 둔다 */
+  if(n<cr){ r.round=n; save(); draw(); window.scrollTo(0,0); return; }
+  /* 앞으로 가려는 것 — 조건을 채웠으면 그냥 넘겨주고, 아니면 왜 안 되는지 말해 준다 */
+  if(r.round===1){
+    if(!r.a1){ stepTip("먼저 <b>1차 답</b>을 하나 고르세요. 그래야 2차로 갑니다."); return; }
+    submit1();
+    if(n===3) stepTap(3);
+    return;
+  }
+  if(r.round===2){
+    if(!r.a2){ stepTip("<b>2차 답</b>을 아직 안 골랐습니다. 하나 고르세요."); return; }
+    var miss=checkFill();
+    if(miss>0){
+      stepTip("해석이 <b>"+miss+"칸</b> 비었습니다. 다 채우면 3차 정답 확인으로 갑니다.");
+      var f=document.querySelector(".sb.miss"); if(f) f.scrollIntoView({block:"center"});
+      return;
+    }
+    submit2();
+  }
+}
 function round2(d,r){
   /* 해석을 쓰는 동안에도 왼쪽 지문이 그대로 보이도록, 해석 칸까지 오른쪽 안에 넣는다 */
   var h='<div class="split">'+
@@ -701,12 +785,16 @@ function checkFill(){
       : (r.a2?'<div class="card" style="border-color:#86efac;background:#f0fdf4;color:#166534;font-weight:700">다 썼다 — 제출해도 좋아</div>'
              :'<div class="nag">★ 답을 아직 안 골랐어 빨리해</div>');
   }
-  var b=document.getElementById("go2"); if(b) b.disabled=!ok;
+  /* disabled 로 죽이지 않는다 — 눌러야 이유를 말해 줄 수 있다 */
+  var b=document.getElementById("go2"); if(b) b.className="btn"+(ok?"":" dim");
   return miss.length;
 }
 function submit2(){
   var r=rec(cur.id);
-  if(checkFill()>0 || !r.a2){
+  var miss=checkFill();
+  if(miss>0 || !r.a2){
+    stepTip(!r.a2 ? "<b>2차 답</b>을 아직 안 골랐습니다. 하나 고르세요."
+                  : "해석이 <b>"+miss+"칸</b> 비었습니다. 다 채우면 정답을 보여 드립니다.");
     var f=document.querySelector(".sb.miss");
     if(f) f.scrollIntoView({block:"center"});
     return;
@@ -758,6 +846,10 @@ function round3(d,r){
      '<button class="btn ghost" onclick="undoRound(2)">← 2차로 돌아가기</button>'+
      '<button class="btn ghost" onclick="nav(\'list\')">목록으로</button>'+
    '</div>'+
+   (MANY?'<div class="row2">'+
+     '<button class="btn ghost" onclick="nav(\'expr\')">중요 표현 모아 보기</button>'+
+     '<button class="btn ghost" onclick="nav(\'stats\')">내 결과 보기</button>'+
+   '</div>':'')+
    '<div class="stickB">'+
      '<button class="btn" onclick="finish()">정리 끝내기</button>'+
    '</div></div></div>';
@@ -782,7 +874,12 @@ function reJudge(){
   document.getElementById("sumres").innerHTML=sumRes(judge(r.sum,cur.rub),cur,r.sum);
 }
 function setCause(c){ var r=rec(cur.id); r.cause=(r.cause===c?"":c); save(); draw(); }
-function finish(){ var r=rec(cur.id); r.round=4; r.fin=today(); save(); nav("list"); }
+function finish(){
+  var r=rec(cur.id); r.round=4; r.fin=today(); save();
+  /* QR로 지문 하나만 받은 페이지에는 목록이 없다 — 계획 화면으로 튕기지 않게 한다 */
+  if(!MANY){ alert("정리를 마쳤습니다. 수고했습니다."); draw(); return; }
+  nav("list");
+}
 
 /* ---- 숙어 퀴즈 ---- */
 /* 같은 뜻을 다른 말로 쓴 경우를 잡아 준다 (애초에 ↔ 처음에 ↔ 원래) */
@@ -856,7 +953,8 @@ function idiomQuiz(d,r){
        '</div>';
   });
   var n=d.idi.length, done=Object.keys(r.idi).length;
-  h+='<p class="mini">'+done+'/'+n+' 확인함. 모른다고 한 숙어는 <b>내 단어장</b>에 쌓입니다.</p>';
+  h+='<p class="mini">'+done+'/'+n+' 확인함. 모른다고 한 숙어는 <b>내 단어장</b>에, '+
+     '이 글의 표현 전부는 위쪽 <b>중요 표현</b> 화면에 모입니다.</p>';
   return h;
 }
 /* 자동 채점이 틀렸다고 했지만 학생이 "뜻이 같다"고 누른 것 —
@@ -938,8 +1036,12 @@ function bindWords(){
       }
     };
   });
+  /* S펜 손글씨 인식·키보드 자동완성은 input 이벤트를 안 쏘는 기기가 있다.
+     그러면 칸은 채워졌는데 제출 단추가 계속 흐린 채로 남아 "안 넘어간다"가 된다.
+     change·blur·keyup 에서도 다시 세어 준다. (2026-07-31) */
   document.querySelectorAll("textarea[data-i]").forEach(function(t){
-    t.onchange=function(){ rec(cur.id).trans[t.dataset.i]=t.value; save(); };
+    var upd=function(){ rec(cur.id).trans[t.dataset.i]=t.value; checkFill(); };
+    t.onchange=upd; t.onblur=upd; t.onkeyup=upd; t.oninput=upd;
   });
 }
 /* 사전에 없으면 슬래시 해석의 덩어리에서 거꾸로 찾아 준다 */
@@ -1047,7 +1149,9 @@ var T=null;
 function testStart(){
   var arr=bankList().filter(function(o){ return o.k; });
   if(!arr.length){ alert("이 기간에 뜻이 있는 단어가 없습니다."); return; }
-  for(var i=arr.length-1;i>0;i--){ var j=(i*7919+arr.length*13)%(i+1); var t=arr[i];arr[i]=arr[j];arr[j]=t; }
+  /* 예전에는 계산식으로 섞어서 단어 수가 같으면 매번 똑같은 순서가 나왔다 —
+     "랜덤 테스트"인데 랜덤이 아니었다. (2026-07-31) */
+  for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i];arr[i]=arr[j];arr[j]=t; }
   T={q:arr.slice(0,Math.min(20,arr.length)),i:0,ok:0,ans:"",shown:false};
   nav("test");
 }
@@ -1169,6 +1273,151 @@ function adminView(){
     '<button class="btn ghost" style="color:#b91c1c;border-color:#fecaca" onclick="wipeAll()">전부 지우기</button>'+
     '<p class="mini">계획(유형·하루 분량·시작일)은 지워지지 않습니다. 계획은 "계획" 화면에서 바꾸세요.</p>';
   document.getElementById("app").innerHTML=h;
+}
+
+/* ================= 내 결과 (학생이 직접 보는 분석) =================
+   학부모 화면과 같은 숫자를 학생 말로 바꿔 보여 준다. 숨기지 않는다 —
+   1차·2차를 맞대야 "단어 문제인지 독해 문제인지"가 학생 눈에도 보인다. */
+function myRecs(){
+  return Object.keys(ST.rec).map(function(k){ var o=ST.rec[k]; o._id=k; return o; })
+           .filter(function(o){ return byId(o._id); });
+}
+function statsView(){
+  stopClock(); cur=null;
+  document.getElementById("hpill").textContent="";
+  var recs=myRecs(), fin=recs.filter(function(o){return o.round>3;});
+  var p=planned(), done=doneIds().length, pct=p.length?Math.round(done/p.length*100):0;
+  var h='<h1>내 결과</h1>';
+  if(!fin.length){
+    document.getElementById("app").innerHTML=h+
+      '<div class="card">아직 <b>끝까지 푼 지문</b>이 없습니다.<br>'+
+      '지문을 1차 → 2차 → 3차까지 마치고 <b>정리 끝내기</b>를 누르면 여기에 결과가 쌓입니다.</div>'+
+      '<button class="btn" onclick="nav(\'list\')">지문 풀러 가기</button>';
+    return;
+  }
+  var a1=fin.filter(function(o){ return o.a1===byId(o._id).ans; }).length;
+  var a2=fin.filter(function(o){ return o.a2===byId(o._id).ans; }).length;
+  var p1=Math.round(a1/fin.length*100), p2=Math.round(a2/fin.length*100);
+  var sec=recs.reduce(function(a,o){return a+(o.sec||0);},0);
+  var g={ok:0,voca:0,luck:0,read:0};
+  fin.forEach(function(o){
+    var d=byId(o._id), x=o.a1===d.ans, y=o.a2===d.ans;
+    if(x&&y) g.ok++; else if(!x&&y) g.voca++; else if(x&&!y) g.luck++; else g.read++;
+  });
+  /* 요약 채점 평균 */
+  var rsum=0, rtot=0;
+  fin.forEach(function(o){ var d=byId(o._id);
+    rsum+=judge(o.sum,d.rub).filter(Boolean).length; rtot+=d.rub.length; });
+  var rpct=rtot?Math.round(rsum/rtot*100):0;
+  h+= (p.length?'<div class="card"><b>'+done+' / '+p.length+' 지문</b> <span class="mini">('+pct+'%)</span>'+
+       '<div class="gauge"><i style="width:'+pct+'%"></i></div></div>':'')+
+    '<div class="lab">맞힌 비율 <span class="mini">1차는 사전 없이 푼 실전 점수입니다</span></div>'+
+    '<div class="two">'+
+      '<div class="card" style="text-align:center"><div class="mini">1차 (사전 잠김)</div>'+
+        '<div style="font-size:34px;font-weight:800;color:'+(p1<50?"#b91c1c":(p1<80?"#e8890c":"#0f9d58"))+'">'+p1+'%</div>'+
+        '<div class="mini">'+a1+' / '+fin.length+'개</div></div>'+
+      '<div class="card" style="text-align:center"><div class="mini">2차 (사전 열림)</div>'+
+        '<div style="font-size:34px;font-weight:800;color:#3b5bdb">'+p2+'%</div>'+
+        '<div class="mini">'+a2+' / '+fin.length+'개'+(p2>p1?' · ↑'+(p2-p1):'')+'</div></div>'+
+    '</div>'+
+    '<p class="sub">2차에서 많이 오르면 <b>단어를 몰라서</b> 틀린 것이고, 2차에도 그대로면 <b>글을 못 읽어서</b> 틀린 것입니다.</p>'+
+    '<div class="lab">무엇 때문에 틀리나</div><div class="card"><table>'+
+    '<tr><td>확실히 안다</td><td><b>'+g.ok+'</b>개</td><td class="mini">난도를 올려도 됩니다</td></tr>'+
+    '<tr><td>어휘 때문</td><td><b class="ok">'+g.voca+'</b>개</td><td class="mini">단어장만 돌리면 오릅니다</td></tr>'+
+    '<tr><td>찍었을 가능성</td><td><b>'+g.luck+'</b>개</td><td class="mini">맞았다고 안심하면 안 됩니다</td></tr>'+
+    '<tr><td>독해·논리 문제</td><td><b class="no">'+g.read+'</b>개</td><td class="mini">선생님과 같이 봐야 합니다</td></tr>'+
+    '</table></div>'+
+    '<div class="lab">한 줄 요약 점수 <span class="mini">핵심 요소를 몇 개 담았나</span></div>'+
+    '<div class="card"><b>'+rsum+' / '+rtot+'</b> <span class="mini">('+rpct+'%)</span>'+
+    '<div class="gauge"><i style="width:'+rpct+'%"></i></div>'+
+    '<div class="mini" style="margin-top:6px">낮으면 글을 "무슨 말인지"까지는 못 잡고 있다는 뜻입니다.</div></div>'+
+    '<div class="lab">푼 시간</div><div class="card">모두 합쳐 <b>'+Math.round(sec/60)+'분</b> · '+
+      '지문 하나에 평균 <b>'+Math.round(sec/60/fin.length)+'분</b></div>'+
+    '<div class="lab">유형별 — 어디가 약한가</div>'+typeTable(fin)+
+    '<div class="lab">많이 틀린 단어</div>'+topWrongHTML(12)+
+    '<div class="lab">푼 지문 하나하나</div>'+detailTable(fin)+
+    '<button class="btn ghost" onclick="nav(\'expr\')">중요 표현 모아 보기</button>'+
+    '<button class="btn ghost" onclick="nav(\'bank\')">내 단어장으로</button>';
+  document.getElementById("app").innerHTML=h;
+}
+function topWrongHTML(n){
+  var bad=Object.keys(ST.bank).map(function(k){return ST.bank[k];})
+            .filter(function(o){return o.miss>0;})
+            .sort(function(x,y){return y.miss-x.miss;}).slice(0,n);
+  if(!bad.length) return '<p class="mini">아직 없습니다. 랜덤 테스트를 풀면 쌓입니다.</p>';
+  var h='<table><tr><th>단어</th><th>뜻</th><th style="width:60px">틀림</th></tr>';
+  bad.forEach(function(o){
+    h+='<tr><td><b>'+esc(o.w)+'</b>'+(o.t==="i"?' <span class="chip i">숙어</span>':'')+'</td>'+
+       '<td>'+esc(o.k||"")+'</td><td><b class="no">'+o.miss+'</b></td></tr>';
+  });
+  return h+'</table>';
+}
+
+/* ================= 중요 표현 모아 보기 =================
+   푼 지문에 나온 숙어를 한곳에 모은다. 단어장은 "모른다고 한 것"만 쌓이지만,
+   여기는 지나간 지문의 표현이 전부 남는다 — 시험 전에 훑는 자리다. */
+var exprFilter="all";
+function allExprs(){
+  var out=[];
+  DATA.forEach(function(d){
+    var r=ST.rec[d.id];
+    if(!r) return;                       /* 손도 안 댄 지문은 빼고 */
+    if(!d.idi||!d.idi.length) return;
+    d.idi.forEach(function(v,i){
+      var st=r.idi&&r.idi[i];
+      out.push({en:v[0], ko:v[2], hint:v[1], id:d.id,
+                src:d.y+"."+d.m+" "+d.q+"번", type:d.type,
+                state: st?(st.ok?"ok":"no"):"none"});
+    });
+  });
+  return out;
+}
+function exprView(){
+  stopClock(); cur=null;
+  document.getElementById("hpill").textContent="";
+  var all=allExprs();
+  var cnt={all:all.length,
+           no:all.filter(function(x){return x.state==="no";}).length,
+           ok:all.filter(function(x){return x.state==="ok";}).length,
+           none:all.filter(function(x){return x.state==="none";}).length};
+  var arr=all.filter(function(x){ return exprFilter==="all"||x.state===exprFilter; });
+  var h='<h1>중요 표현</h1>'+
+    '<p class="sub">푼 지문에 나온 <b>숙어·표현</b>이 전부 여기 모입니다. 시험 전에 이 화면만 훑으세요.</p>'+
+    '<nav>'+
+    [["all","전체 "+cnt.all],["no","틀린 것 "+cnt.no],["ok","맞힌 것 "+cnt.ok],["none","아직 안 함 "+cnt.none]]
+      .map(function(x){
+        return '<button class="'+(exprFilter===x[0]?"on":"")+'" onclick="exprFilter=\''+x[0]+'\';draw()">'+x[1]+'</button>';
+      }).join("")+'</nav>';
+  if(!all.length){
+    h+='<div class="card">아직 없습니다. 지문을 3차(정답 확인)까지 풀면 그 글의 숙어가 여기 쌓입니다.</div>'+
+       '<button class="btn" onclick="nav(\'list\')">지문 풀러 가기</button>';
+    document.getElementById("app").innerHTML=h; return;
+  }
+  if(!arr.length) h+='<p class="sub" style="margin-top:16px">이 조건에 해당하는 표현이 없습니다.</p>';
+  else{
+    h+='<table style="margin-top:12px"><tr><th>표현</th><th>뜻</th><th style="width:74px">결과</th></tr>';
+    arr.forEach(function(x,i){
+      var badge = x.state==="ok"?'<span class="ok">○ 맞힘</span>'
+                : x.state==="no"?'<span class="no">✕ 틀림</span>'
+                : '<span class="mini">-</span>';
+      h+='<tr><td><b style="font-family:Georgia,serif">'+esc(x.en)+'</b>'+
+         '<div class="mini">'+esc(x.src)+' · '+esc(x.type)+'</div></td>'+
+         '<td>'+esc(x.ko)+(x.hint?'<div class="mini">'+esc(x.hint)+'</div>':'')+'</td>'+
+         '<td>'+badge+'<div><button class="btn sm ghost" style="margin-top:4px;padding:4px 8px"'+
+         ' onclick="speak(\''+x.en.replace(/'/g,"\\'")+'\')">🔊</button></div></td></tr>';
+    });
+    h+='</table>';
+  }
+  h+='<button class="btn" onclick="exprSaveAll()">＋ 지금 보이는 표현을 내 단어장에 담기</button>'+
+     '<p class="mini">단어장에 담으면 <b>랜덤 테스트</b>에 함께 나옵니다.</p>'+
+     '<button class="btn ghost" onclick="nav(\'bank\')">내 단어장으로</button>';
+  document.getElementById("app").innerHTML=h;
+}
+function exprSaveAll(){
+  var arr=allExprs().filter(function(x){ return exprFilter==="all"||x.state===exprFilter; });
+  if(!arr.length) return;
+  arr.forEach(function(x){ bankAdd(x.en,x.hint,x.ko,"i",x.id); });
+  save(); alert(arr.length+"개를 내 단어장에 담았습니다."); draw();
 }
 
 /* ================= 학부모 보고서 ================= */
@@ -1326,12 +1575,15 @@ function draw(){
   var b=document.getElementById("hback");
   if(b) b.className="back"+(NAV.length?"":" hide");
   var h='<nav>'+
-    [["list","오늘의 도전"],["bank","내 단어장"],["home","계획"],["admin","관리"]].map(function(x){
+    [["list","오늘의 도전"],["stats","내 결과"],["expr","중요 표현"],
+     ["bank","내 단어장"],["home","계획"],["admin","관리"]].map(function(x){
       return '<button class="'+(VIEW===x[0]?"on":"")+'" onclick="'+
              (x[0]==="home"?"planDraft=null;":"")+'nav(\''+x[0]+'\')">'+x[1]+'</button>';
     }).join("")+'</nav>';
   if(VIEW==="read"){ readView(); return; }
   if(VIEW==="bank"){ bankView(); }
+  else if(VIEW==="stats"){ statsView(); }
+  else if(VIEW==="expr"){ exprView(); }
   else if(VIEW==="test"){ testView(); }
   else if(VIEW==="admin"){ adminView(); }
   else if(VIEW==="parent"){ parentView(); }
